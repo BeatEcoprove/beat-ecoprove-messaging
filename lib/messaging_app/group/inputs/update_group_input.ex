@@ -1,8 +1,6 @@
 defmodule MessagingApp.Group.Inputs.UpdateGroupInput do
   import Ecto.Changeset
 
-  alias Messaging.Persistence.Schemas.User
-
   @enforce_keys [:name, :description]
   defstruct [:name, :description, is_public: false]
 
