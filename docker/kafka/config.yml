@@ -1,0 +1,11 @@
+auth:
+  type: DISABLED
+kafka:
+  clusters:
+  - bootstrapServers: kafka-b:9094
+    name: Ecoprove
+    properties: {}
+    readOnly: false
+rbac:
+  roles: []
+webclient: {}
