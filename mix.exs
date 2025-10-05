@@ -25,6 +25,7 @@ defmodule Messaging.MixProject do
 
   defp deps do
     [
+      {:redix, "~> 1.1"},
       {:jose, "~> 1.11"},
       {:joken_jwks, "~> 1.7"},
       {:joken, "~> 2.6"},

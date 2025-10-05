@@ -36,8 +36,6 @@ defmodule MessagingWeb.Controllers.GroupController do
   Create Group
   """
   def create(conn = %{assigns: %{current_user: current_user}}, %{"payload" => payload}) do
-    IO.puts("#inspect(payload)")
-
     input = %CreateGroupInput{
       name: payload["name"],
       description: payload["description"],

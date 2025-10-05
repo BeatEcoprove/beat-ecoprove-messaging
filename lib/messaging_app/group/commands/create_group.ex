@@ -8,7 +8,8 @@ defmodule MessagingApp.Group.Commands.CreateGroup do
 
   def call(input = %CreateGroupInput{}) do
     with {:ok} <- group_exists?(input.name, input.creator.id),
-         {:ok, group} <- create_group(input),
+         {:ok, creator} <- get_creator(input.creator.id),
+         {:ok, group} <- create_group(input, creator),
          :ok <- send_created_group_event(group) do
       {:ok, group}
     else
@@ -21,29 +22,31 @@ defmodule MessagingApp.Group.Commands.CreateGroup do
       GroupRepo.already_created?(name, creator_id)
       |> check_group_exists()
 
+  defp get_creator(id) do
+    case UserRepo.get_by_public_id(id) do
+      nil ->
+        {:error, :user_not_found}
+
+      creator ->
+        {:ok, creator}
+    end
+  end
+
   defp check_group_exists(true), do: {:error, :group_already_exists}
   defp check_group_exists(false), do: {:ok}
 
-  defp create_group(input = %CreateGroupInput{}) do
-    IO.puts("Creating group with input: #{inspect(input.creator)}")
-
+  defp create_group(input = %CreateGroupInput{}, creator) do
     Repo.transact(fn ->
       with {:ok, group} <-
              GroupRepo.create(%{
                name: input.name,
                description: input.description,
-               creator_id: input.creator.id,
+               creator_id: creator.public_id,
                is_public: input.is_public || false
-             }),
-           {:ok, create_user} =
-             UserRepo.create(%{
-               public_id: input.creator.id,
-               email: input.creator.email,
-               role: input.creator.role
              }),
            {:ok, _} <-
              MemberRepo.create(%{
-               user_id: create_user.id,
+               user_id: creator.id,
                group_id: group.id
              }) do
         {:ok, group}
@@ -56,7 +59,7 @@ defmodule MessagingApp.Group.Commands.CreateGroup do
 
   defp send_created_group_event(group = %Messaging.Persistence.Schemas.Group{}) do
     Messaging.Broker.EventBus.publish(
-      :auth_events,
+      :messaging_events,
       %Messaging.Broker.Events.GroupCreatedEvent{
         group_id: group.public_id,
         creator_id: group.creator_id

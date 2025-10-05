@@ -7,4 +7,19 @@ defmodule Messaging.Persistence.Repos.UserRepo do
     |> User.changeset(attr)
     |> Repo.insert()
   end
+
+  def get(id) do
+    Repo.get(User, id)
+  end
+
+  def already_created?(public_id) do
+    case Repo.get_by(User, public_id: public_id) do
+      nil -> false
+      _group -> true
+    end
+  end
+
+  def get_by_public_id(id) do
+    Repo.get_by(User, public_id: id)
+  end
 end

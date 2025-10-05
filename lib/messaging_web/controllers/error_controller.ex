@@ -1,9 +1,19 @@
 defmodule MessagingWeb.Controllers.ErrorController do
+  alias Messaging.Flow.Errors.User
+  alias Messaging.Flow.Errors.Invite
   alias Messaging.Flow
   alias Messaging.Flow.Errors.{Group}
   use MessagingWeb, :controller
 
-  @errors Map.merge(Group.register(), %{})
+  @errors_list [
+    Group.register(),
+    User.register(),
+    Invite.register()
+  ]
+
+  @errors Enum.reduce(@errors_list, %{}, fn map, acc ->
+            Map.merge(acc, map)
+          end)
 
   defp render_error(app_error, conn) do
     app_error = Map.put(app_error, :instance, conn.request_path)

@@ -18,6 +18,11 @@ config :messaging, Messaging.Auth.Jwt,
   identity_service_url: System.get_env("IDENTITY_URL"),
   issuer: "Beat"
 
+config :messaging, Messaging.Redis.RClient,
+  host: "localhost",
+  port: 6379,
+  database: 0
+
 config :brod,
   clients: [
     kafka_client: [

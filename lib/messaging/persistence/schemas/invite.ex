@@ -4,6 +4,38 @@ defmodule Messaging.Persistence.Schemas.Invite do
   alias Messaging.Persistence.Helpers
   import Ecto.Changeset
 
+  defmodule Role do
+    @role %{
+      0 => :member,
+      1 => :admin
+    }
+
+    def get_role(role) do
+      Map.get(@role, role, Map.get(@role, 0))
+    end
+  end
+
+  defmodule Status do
+    @status %{
+      0 => :pending,
+      1 => :accepted,
+      2 => :declined,
+      3 => :expired,
+      4 => :revoked
+    }
+
+    def get_status(status), do: Map.get(@status, status, Map.get(@status, 0))
+
+    def get_status_key(value) do
+      @status
+      |> Enum.find(fn {_k, v} -> v == value end)
+      |> case do
+        {key, _v} -> key
+        nil -> 0
+      end
+    end
+  end
+
   @type t :: %__MODULE__{}
 
   # @status_pending 0
@@ -20,10 +52,8 @@ defmodule Messaging.Persistence.Schemas.Invite do
   schema "invites" do
     field(:public_id, :string, autogenerate: {Ecto.UUID, :generate, []})
     field(:token, :string)
-    # 0 (pending) / 1 (accepted) / 2 (declined) / 4 (expired) / 5 (revoked)
-    field(:status, :integer)
-    # 0 (member) / 1 (admin)
-    field(:role, :integer)
+    field(:status, :integer, default: 0)
+    field(:role, :integer, default: 0)
 
     belongs_to(:group, Messaging.Persistence.Schemas.Group, type: :string)
     belongs_to(:inviter, Messaging.Persistence.Schemas.User, type: :string)
@@ -35,8 +65,21 @@ defmodule Messaging.Persistence.Schemas.Invite do
     field(:deleted_at, :utc_datetime_usec, default: nil)
   end
 
-  def changeset(group, attrs) do
-    group
+  def changeset_status(invite, status) when is_atom(status) do
+    invite
+    |> cast(%{"status" => Status.get_status_key(status)}, [:status])
+    |> validate_required([:status],
+      message: "please provide the status"
+    )
+    |> validate_number(:status,
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 5,
+      message: "Status must be a integer of the range of [0..5]"
+    )
+  end
+
+  def changeset(invite, attrs) do
+    invite
     |> cast(attrs, [
       :public_id,
       :group_id,
@@ -51,27 +94,16 @@ defmodule Messaging.Persistence.Schemas.Invite do
       message: "name, description, and is_public are required fields"
     )
     |> validate_number(:status,
-      min: 0,
-      max: 5,
-      allow_nil: true,
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 5,
       message: "Status must be a integer of the range of [0..5]"
     )
     |> validate_number(:role,
-      min: 0,
-      max: 1,
-      allow_nil: true,
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 1,
       message: "Role must be the range of [0..1], (member/admin)"
     )
-    |> validate_number(:sustainability_points,
-      min: 0,
-      allow_nil: true,
-      message: "Sustainability points must be a non-negative number"
-    )
     |> Helpers.validate_uuid(:public_id)
-    |> Helpers.validate_uuid(:token)
-    |> Helpers.validate_uuid(:group_id)
-    |> Helpers.validate_uuid(:inviter_id)
-    |> Helpers.validate_uuid(:invitee_id)
     |> unique_constraint(:token,
       name: :token_index,
       message: "Cannot exist two invites with the same token"

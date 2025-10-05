@@ -9,7 +9,9 @@ defmodule Messaging.Application do
       {Phoenix.PubSub, name: Messaging.PubSub},
       {Finch, name: Messaging.Finch},
       MessagingWeb.Endpoint,
-      Messaging.Repo
+      Messaging.Repo,
+      Messaging.Redis.RClient,
+      Messaging.Broker.EventBus
     ]
 
     opts = [strategy: :one_for_one, name: Messaging.Supervisor]
