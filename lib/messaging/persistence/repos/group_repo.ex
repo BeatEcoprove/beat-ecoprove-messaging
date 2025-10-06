@@ -35,6 +35,11 @@ defmodule Messaging.Persistence.Repos.GroupRepo do
     Repo.get_by(Group, public_id: id)
   end
 
+  def preload(ecto) do
+    ecto
+    |> Repo.preload([:members])
+  end
+
   def get_public_groups do
     Group
     |> where([g], g.is_public == true)

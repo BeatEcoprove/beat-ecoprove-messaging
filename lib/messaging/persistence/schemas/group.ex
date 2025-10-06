@@ -29,6 +29,14 @@ defmodule Messaging.Persistence.Schemas.Group do
     field(:deleted_at, :utc_datetime_usec, default: nil)
   end
 
+  def get_members_count(group) do
+    if Ecto.assoc_loaded?(group.members) do
+      {:ok, length(group.members)}
+    else
+      {:error, :not_preloaded}
+    end
+  end
+
   def changeset(group, attrs) do
     group
     |> cast(attrs, [

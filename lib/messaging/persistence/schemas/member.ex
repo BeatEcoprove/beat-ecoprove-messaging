@@ -6,8 +6,8 @@ defmodule Messaging.Persistence.Schemas.Member do
 
   @primary_key false
   schema "members" do
-    belongs_to(:group, Messaging.Persistence.Schemas.Group, type: :string)
-    belongs_to(:user, Messaging.Persistence.Schemas.User, type: :string)
+    belongs_to(:group, Messaging.Persistence.Schemas.Group, type: :string, primary_key: true)
+    belongs_to(:user, Messaging.Persistence.Schemas.User, type: :string, primary_key: true)
 
     timestamps()
     field(:deleted_at, :utc_datetime_usec, default: nil)

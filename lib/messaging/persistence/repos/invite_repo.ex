@@ -25,6 +25,12 @@ defmodule Messaging.Persistence.Repos.InviteRepo do
   end
 
   def get_by_token(token) do
-    {:ok, Repo.get_by(Invite, token: token)}
+    case Repo.get_by(Invite, token: token) do
+      nil ->
+        {:error, nil}
+
+      invite ->
+        {:ok, invite}
+    end
   end
 end
