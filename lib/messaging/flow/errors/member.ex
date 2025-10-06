@@ -14,6 +14,11 @@ defmodule Messaging.Flow.Errors.Member do
           "Not enough members",
           "You are the only one on the group you can't kick yourself!"
         ),
+      member_c_change_self:
+        Flow.conflict(
+          "Failed change role",
+          "You can't change role to your self!"
+        ),
       member_not_found:
         Flow.not_found(
           "Member not found",

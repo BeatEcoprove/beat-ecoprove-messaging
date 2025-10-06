@@ -19,7 +19,8 @@ defmodule MessagingWeb.Router do
     pipe_through [:api, :auth_required]
 
     resources "/groups", GroupController, only: [:index, :show, :create, :delete, :update] do
-      post "/kick", MemberController, :kick
+      delete "/kick", MemberController, :kick
+      patch "/role", MemberController, :change_role
     end
 
     resources "/groups/:id/invites", InviteController, only: [:create]
