@@ -13,7 +13,8 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
     with {:ok, invite} <- get_invite(token),
          {:ok, true} <- check_validity?(invite, invitee_id),
          {:ok, updated_invite} <-
-           accept_invite(invite) do
+           accept_invite(invite),
+         :ok <- send_invite_accepted_event(updated_invite) do
       {:ok, updated_invite}
     else
       {:error, reason} ->
@@ -95,5 +96,17 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
       inviter ->
         {:ok, inviter}
     end
+  end
+
+  defp send_invite_accepted_event(invite = %Messaging.Persistence.Schemas.Invite{}) do
+    Messaging.Broker.EventBus.publish(
+      :messaging_events,
+      %Messaging.Broker.Events.InviteAcceptedEvent{
+        invite_id: invite.public_id,
+        group_id: invite.group.public_id,
+        invitee_id: invite.invitee.public_id,
+        role: invite.role
+      }
+    )
   end
 end
