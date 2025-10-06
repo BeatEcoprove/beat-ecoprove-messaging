@@ -7,18 +7,28 @@ defmodule MessagingApp.Invite.Commands.CreateInvite do
   alias Messaging.Redis.Keys.InviteKey
   alias Messaging.Redis.RClient
 
-  # TODO propagate when a new user is created on auth and treat the event
+  # TODO on token verify if the current user has access to invite others onto the group!
   def call(input = %CreateInviteInput{}) do
-    # TODO btw u can't invite yourself!
     with {:ok, group_ctx} <- get_group(input.group_id),
          {:ok, inviter} <- get_inviter(input.inviter_id),
          {:ok, invitee} <- get_invitee(input.invitee_id),
+         {:ok} <- check_self_invitation(inviter.id, invitee.id),
          {:ok, invite} <- create_invite(group_ctx, inviter, invitee, input.role),
          :ok <- send_create_invite_event(invite) do
       {:ok, invite}
     else
       {:error, reason} ->
         {:error, reason}
+    end
+  end
+
+  defp check_self_invitation(inviter_id, invitee_id) do
+    case inviter_id != invitee_id do
+      true ->
+        {:ok}
+
+      false ->
+        {:error, :invite_self}
     end
   end
 

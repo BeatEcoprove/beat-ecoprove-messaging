@@ -9,6 +9,11 @@ defmodule Messaging.Flow.Errors.Invite do
           "Invite not found",
           "The invite you are looking for does not exist or may have been expired."
         ),
+      invite_self:
+        Flow.conflict(
+          "Failed to invite",
+          "You can't invite yourself to the group"
+        ),
       invite_expired:
         Flow.forbidden(
           "Invite Expired",

@@ -22,5 +22,6 @@ defmodule MessagingWeb.Router do
 
     resources "/groups/:id/invites", InviteController, only: [:create]
     post "/invites/accept", InviteController, :accept
+    post "/invites/decline", InviteController, :decline
   end
 end

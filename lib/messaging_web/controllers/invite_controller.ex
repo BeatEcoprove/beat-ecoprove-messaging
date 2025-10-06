@@ -41,4 +41,18 @@ defmodule MessagingWeb.Controllers.InviteController do
         {:error, reason}
     end
   end
+
+  def decline(conn = %{assigns: %{current_user: current_user}}, %{
+        "token" => token
+      }) do
+    case MessagingApp.Invite.Invite.decline_invite(current_user.id, token) do
+      {:ok, invite} ->
+        conn
+        |> put_status(:ok)
+        |> render("invite.json", invite: invite)
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
 end

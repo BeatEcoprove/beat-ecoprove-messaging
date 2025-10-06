@@ -1,9 +1,5 @@
-defmodule MessagingApp.Invite.Commands.AcceptInvite do
+defmodule MessagingApp.Invite.Commands.DeclineInvite do
   alias Messaging.Persistence.Schemas.Invite.Status
-  alias Messaging.Repo
-  alias Messaging.Persistence.Repos.MemberRepo
-  alias Messaging.Persistence.Repos.GroupRepo
-  alias Messaging.Persistence.Repos.UserRepo
   alias Messaging.Persistence.Repos.InviteRepo
   alias Messaging.Redis.RClient
   alias Messaging.Redis.Keys.InviteKey
@@ -13,7 +9,7 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
     with {:ok, invite} <- get_invite(token),
          {:ok, true} <- check_validity?(invite, invitee_id),
          {:ok, updated_invite} <-
-           accept_invite(invite) do
+           decline_invite(invite) do
       {:ok, updated_invite}
     else
       {:error, reason} ->
@@ -31,37 +27,13 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
     end
   end
 
-  defp accept_invite(invite) do
-    Repo.transact(fn ->
-      with {:ok, group} <- get_group(invite.group_id),
-           {:ok, user} <- get_invitee(invite.invitee_id),
-           {:ok, _} <-
-             MemberRepo.create(%{
-               user_id: user.id,
-               group_id: group.id
-             }),
-           {:ok, updated_invite} <-
-             InviteRepo.change_status(invite, :accepted) || {:error, :invite_fail_accept} do
-        {:ok, updated_invite}
-      else
-        {:error, reason} ->
-          {:error, reason}
-      end
-    end)
-    |> case do
-      {:error, reason} ->
-        InviteRepo.change_status(invite, :revoked)
-        {:error, reason}
-
+  defp decline_invite(invite) do
+    case InviteRepo.change_status(invite, :declined) do
       {:ok, updated_invite} ->
         {:ok, updated_invite}
-    end
-  end
 
-  defp get_group(group_id) do
-    case(GroupRepo.get(group_id)) do
-      nil -> {:error, :group_not_found}
-      group -> {:ok, group}
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
@@ -84,16 +56,6 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
           invite ->
             {:ok, invite}
         end
-    end
-  end
-
-  defp get_invitee(invitee_id) do
-    case UserRepo.get(invitee_id) do
-      nil ->
-        {:error, :user_not_found}
-
-      inviter ->
-        {:ok, inviter}
     end
   end
 end
