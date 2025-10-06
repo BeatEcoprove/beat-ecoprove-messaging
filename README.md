@@ -1,18 +1,11 @@
-# Messaging
+# Messaging Service
 
-To start your Phoenix server:
+## Overview
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+  This repository contains a **microservice** built using **Elixir** with the **Phoenix** framework. It serves as the **messaging service** for the **Beat Back End**, responsible for managing chats, sending emails, (...)
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+### Technologies
+- **Elixir Version**: 1.18.4
+- **Framework**: **Phoenix** (Version: 1.7.21)
+- **Docker**: Containerized microservice
+- **.env**: Environment-specific configurations for the project
