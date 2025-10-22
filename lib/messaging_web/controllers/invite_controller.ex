@@ -3,6 +3,9 @@ defmodule MessagingWeb.Controllers.InviteController do
 
   alias MessagingApp.Invite.Inputs.CreateInviteInput
 
+  plug MessagingWeb.Plugs.RequireScope,
+    resource: :invite
+
   @doc """
   Send invite to a user
   """

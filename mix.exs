@@ -25,6 +25,7 @@ defmodule Messaging.MixProject do
 
   defp deps do
     [
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:redix, "~> 1.1"},
       {:jose, "~> 1.11"},
       {:joken_jwks, "~> 1.7"},
@@ -50,7 +51,9 @@ defmodule Messaging.MixProject do
 
   defp aliases do
     [
-      setup: ["deps.get"]
+      setup: ["deps.get"],
+      server: ["ecto.migrate", "phx.server"],
+      reset: ["ecto.rollback"]
     ]
   end
 end

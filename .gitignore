@@ -24,4 +24,5 @@ erl_crash.dump
 
 # Ignore package tarball (built via "mix hex.build").
 messaging-*.tar
-
+.elixir_ls/
+.elixir-tools/

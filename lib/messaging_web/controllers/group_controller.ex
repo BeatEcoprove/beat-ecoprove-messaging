@@ -4,6 +4,13 @@ defmodule MessagingWeb.Controllers.GroupController do
   alias MessagingApp.Group.Inputs.UpdateGroupInput
   alias MessagingApp.Group.Inputs.CreateGroupInput
 
+  plug MessagingWeb.Plugs.RequireScope,
+    resource: :group,
+    actions: [
+      index: :view,
+      show: :view
+    ]
+
   @doc """
   Get user belonging groups
   """

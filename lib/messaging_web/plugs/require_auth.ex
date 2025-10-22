@@ -12,7 +12,8 @@ defmodule MessagingWeb.Plugs.RequireAuth do
       assign(conn, :current_user, %MessagingApp.Schemas.Identity{
         id: claims["sub"],
         email: claims["email"],
-        role: claims["role"] || "client"
+        role: claims["role"],
+        scope: claims["scope"]
       })
     else
       _ ->

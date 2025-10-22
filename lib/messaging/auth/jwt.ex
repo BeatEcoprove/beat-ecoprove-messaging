@@ -9,7 +9,9 @@ defmodule Messaging.Auth.Jwt do
 
   def token_config() do
     default_claims(skip: [:aud, :iss])
-    |> add_claim("role", nil, fn role -> role in ["client", "enterprise", "admin"] end)
+    |> add_claim("role", nil, fn role ->
+      role in ["client", "enterprise", "admin", "anonymous"]
+    end)
   end
 
   defp fetch_jwks do

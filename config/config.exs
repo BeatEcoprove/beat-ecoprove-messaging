@@ -26,7 +26,7 @@ config :messaging, Messaging.Redis.RClient,
 config :brod,
   clients: [
     kafka_client: [
-      endpoints: [{"127.0.0.1", 9092}],
+      endpoints: [{"127.0.0.1", 9094}],
       auto_start_producers: true
     ]
   ]

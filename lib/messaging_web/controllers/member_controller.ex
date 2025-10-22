@@ -1,6 +1,13 @@
 defmodule MessagingWeb.Controllers.MemberController do
   use MessagingWeb, :controller
 
+  plug MessagingWeb.Plugs.RequireScope,
+    resource: :member,
+    actions: [
+      index: :view,
+      show: :view
+    ]
+
   def change_role(conn = %{assigns: %{current_user: current_user}}, %{
         "group_id" => group_id,
         "name" => role
