@@ -12,6 +12,17 @@ defmodule Messaging.Persistence.Repos.MemberRepo do
     |> repo.insert()
   end
 
+  def is_member(member_id, group_id) do
+    result =
+      case get_by_public_id(member_id, group_id) do
+        nil -> false
+        _member -> true
+      end
+
+    IO.puts("result = #{inspect(result)}")
+    result
+  end
+
   def get_by_public_id(member_id, group_id) do
     from(m in Member,
       left_join: u in User,

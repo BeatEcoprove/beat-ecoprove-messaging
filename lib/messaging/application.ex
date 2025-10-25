@@ -10,7 +10,9 @@ defmodule Messaging.Application do
       {Finch, name: Messaging.Finch},
       MessagingWeb.Endpoint,
       Messaging.Repo,
+      {Mongo, Application.get_env(:messaging, Messaging.Mongo)},
       Messaging.Redis.RClient,
+      Messaging.Auth.UserPresence,
       Messaging.Broker.EventBus
     ]
 

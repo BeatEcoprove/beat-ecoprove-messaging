@@ -23,6 +23,16 @@ config :messaging, Messaging.Redis.RClient,
   port: 6379,
   database: 0
 
+config :messaging, Messaging.Mongo,
+  name: :mongo,
+  url: "mongodb://messaging:messaging@localhost:27017/messaging_db?authSource=admin",
+  pool_size: 10
+
+config :messaging, Messaging.PubSub,
+  adapter: Phoenix.PubSub.Redis,
+  host: "localhost",
+  port: 6379
+
 config :brod,
   clients: [
     kafka_client: [
