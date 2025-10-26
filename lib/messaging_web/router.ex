@@ -21,6 +21,8 @@ defmodule MessagingWeb.Router do
     resources "/groups", GroupController, only: [:index, :show, :create, :delete, :update] do
       delete "/kick", MemberController, :kick
       patch "/role", MemberController, :change_role
+
+      resources "/messages", MessageController, only: [:index, :show]
     end
 
     resources "/groups/:id/invites", InviteController, only: [:create]

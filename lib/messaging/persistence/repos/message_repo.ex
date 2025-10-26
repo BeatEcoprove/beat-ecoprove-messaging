@@ -20,4 +20,14 @@ defmodule Messaging.Persistence.Repos.MessageRepo do
       doc -> Message.load(doc)
     end
   end
+
+  def get_all(group_id, opts \\ []) do
+    Messaging.Mongo.paginate_cursor(
+      @collection,
+      %{
+        "data.group_id": group_id
+      },
+      opts
+    )
+  end
 end
