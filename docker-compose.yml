@@ -24,11 +24,11 @@ services:
     container_name: mongo
     image: docker.io/mongo:8.0.15
     ports:
-      - "27017:27017"
+      - "${MONGO_PORT}:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: messaging
-      MONGO_INITDB_ROOT_PASSWORD: messaging
-      MONGO_INITDB_DATABASE: messaging
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
 
   mongo-express:
     container_name: mongo-express
@@ -36,20 +36,27 @@ services:
     ports:
       - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: messaging
-      ME_CONFIG_MONGODB_ADMINPASSWORD: messaging
-      ME_CONFIG_MONGODB_URL: mongodb://messaging:messaging@mongo:27017/messaging?authSource=admin
-      ME_CONFIG_BASICAUTH_USERNAME: messaging
-      ME_CONFIG_BASICAUTH_PASSWORD: messaging
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:${MONGO_PORT}/${MONGO_DB}?authSource=admin
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_PASSWORD}
     depends_on:
       - mongo
 
   postgres:
     image: docker.io/postgres:18-alpine
-    container_name: dev-database
+    container_name: db-container
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: group_messaging_service
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:5432"
+
+  redis:
+    image: docker.io/redis/redis-stack:latest
+    container_name: redis
+    ports:
+      - "${REDIS_PORT}:6379"
+      - "${REDIS_UI_PORT}:8001"

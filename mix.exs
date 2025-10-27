@@ -43,8 +43,6 @@ defmodule Messaging.MixProject do
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:swoosh, "~> 1.5"},
       {:finch, "~> 0.13"},
-      {:telemetry_metrics, "~> 1.0"},
-      {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
@@ -56,7 +54,7 @@ defmodule Messaging.MixProject do
     [
       setup: ["deps.get"],
       generate: ["phx.swagger.generate"],
-      serve: ["ecto.migrate", "phx.server"],
+      serve: ["generate", "ecto.migrate", "phx.server"],
       reset: ["ecto.rollback"]
     ]
   end

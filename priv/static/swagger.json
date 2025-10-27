@@ -3,30 +3,22 @@
     "version": "1.0",
     "description": "This service is responsable for chats and emails",
     "title": "Messaging Service",
-    "termsOfService": "Open for public",
     "contact": {
       "name": "Beat Ecoprove",
       "email": "beatecoprove@gmail.com"
-    }
+    },
+    "termsOfService": "Open for public"
   },
   "definitions": {
-    "Messages": {
-      "description": "A paginated collection of messages",
+    "Notifications": {
+      "description": "A paginated collection of notifications",
       "properties": {
         "data": {
-          "description": "List of messages",
+          "description": "List of notifications",
           "items": {
-            "$ref": "#/definitions/Message"
+            "$ref": "#/definitions/Notification"
           },
           "type": "array"
-        },
-        "has_next": {
-          "description": "Whether there are more messages",
-          "type": "boolean"
-        },
-        "has_prev": {
-          "description": "Whether there are previous messages",
-          "type": "boolean"
         },
         "page": {
           "description": "Current page number",
@@ -37,7 +29,7 @@
           "type": "integer"
         },
         "total": {
-          "description": "Total number of messages",
+          "description": "Total number of notifications",
           "type": "integer"
         },
         "total_pages": {
@@ -45,7 +37,7 @@
           "type": "integer"
         }
       },
-      "title": "Messages",
+      "title": "Notifications",
       "type": "object"
     },
     "Error": {
@@ -120,124 +112,6 @@
         "id"
       ],
       "title": "Notification",
-      "type": "object"
-    },
-    "Message": {
-      "description": "A message in a group",
-      "properties": {
-        "attachments": {
-          "description": "Message attachments",
-          "items": {
-            "properties": {
-              "filename": {
-                "type": "string"
-              },
-              "mime_type": {
-                "type": "string"
-              },
-              "size": {
-                "type": "integer"
-              },
-              "url": {
-                "type": "string"
-              }
-            },
-            "type": "object"
-          },
-          "type": "array"
-        },
-        "content": {
-          "description": "Message content",
-          "type": "string"
-        },
-        "created_at": {
-          "description": "Creation timestamp",
-          "format": "datetime",
-          "type": "string"
-        },
-        "group_id": {
-          "description": "Group ID",
-          "type": "string"
-        },
-        "id": {
-          "description": "Message ID",
-          "type": "string"
-        },
-        "is_deleted": {
-          "default": false,
-          "description": "Whether the message has been deleted",
-          "type": "boolean"
-        },
-        "is_edited": {
-          "default": false,
-          "description": "Whether the message has been edited",
-          "type": "boolean"
-        },
-        "message_type": {
-          "description": "Type of message",
-          "enum": [
-            "text",
-            "image",
-            "file",
-            "system"
-          ],
-          "type": "string"
-        },
-        "reply_to_id": {
-          "description": "ID of the message being replied to",
-          "type": "string"
-        },
-        "sender_id": {
-          "description": "User ID of the sender",
-          "type": "string"
-        },
-        "sender_username": {
-          "description": "Username of the sender",
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Last update timestamp",
-          "format": "datetime",
-          "type": "string"
-        }
-      },
-      "required": [
-        "content",
-        "sender_id",
-        "group_id",
-        "id"
-      ],
-      "title": "Message",
-      "type": "object"
-    },
-    "Notifications": {
-      "description": "A paginated collection of notifications",
-      "properties": {
-        "data": {
-          "description": "List of notifications",
-          "items": {
-            "$ref": "#/definitions/Notification"
-          },
-          "type": "array"
-        },
-        "page": {
-          "description": "Current page number",
-          "type": "integer"
-        },
-        "page_size": {
-          "description": "Number of items per page",
-          "type": "integer"
-        },
-        "total": {
-          "description": "Total number of notifications",
-          "type": "integer"
-        },
-        "total_pages": {
-          "description": "Total number of pages",
-          "type": "integer"
-        }
-      },
-      "title": "Notifications",
       "type": "object"
     },
     "CreateGroupInput": {
@@ -479,6 +353,132 @@
         }
       },
       "title": "Kick Member Response",
+      "type": "object"
+    },
+    "Messages": {
+      "description": "A paginated collection of messages",
+      "properties": {
+        "data": {
+          "description": "List of messages",
+          "items": {
+            "$ref": "#/definitions/Message"
+          },
+          "type": "array"
+        },
+        "has_next": {
+          "description": "Whether there are more messages",
+          "type": "boolean"
+        },
+        "has_prev": {
+          "description": "Whether there are previous messages",
+          "type": "boolean"
+        },
+        "page": {
+          "description": "Current page number",
+          "type": "integer"
+        },
+        "page_size": {
+          "description": "Number of items per page",
+          "type": "integer"
+        },
+        "total": {
+          "description": "Total number of messages",
+          "type": "integer"
+        },
+        "total_pages": {
+          "description": "Total number of pages",
+          "type": "integer"
+        }
+      },
+      "title": "Messages",
+      "type": "object"
+    },
+    "Message": {
+      "description": "A message in a group",
+      "properties": {
+        "attachments": {
+          "description": "Message attachments",
+          "items": {
+            "properties": {
+              "filename": {
+                "type": "string"
+              },
+              "mime_type": {
+                "type": "string"
+              },
+              "size": {
+                "type": "integer"
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "content": {
+          "description": "Message content",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Creation timestamp",
+          "format": "datetime",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "id": {
+          "description": "Message ID",
+          "type": "string"
+        },
+        "is_deleted": {
+          "default": false,
+          "description": "Whether the message has been deleted",
+          "type": "boolean"
+        },
+        "is_edited": {
+          "default": false,
+          "description": "Whether the message has been edited",
+          "type": "boolean"
+        },
+        "message_type": {
+          "description": "Type of message",
+          "enum": [
+            "text",
+            "image",
+            "file",
+            "system"
+          ],
+          "type": "string"
+        },
+        "reply_to_id": {
+          "description": "ID of the message being replied to",
+          "type": "string"
+        },
+        "sender_id": {
+          "description": "User ID of the sender",
+          "type": "string"
+        },
+        "sender_username": {
+          "description": "Username of the sender",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Last update timestamp",
+          "format": "datetime",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "sender_id",
+        "group_id",
+        "id"
+      ],
+      "title": "Message",
       "type": "object"
     },
     "AcceptInviteInput": {
@@ -1503,13 +1503,13 @@
     }
   },
   "swagger": "2.0",
-  "produces": [
-    "application/json"
-  ],
+  "basePath": "/api",
   "consumes": [
     "application/json"
   ],
-  "basePath": "/api",
+  "produces": [
+    "application/json"
+  ],
   "securityDefinitions": {
     "Bearer": {
       "in": "header",

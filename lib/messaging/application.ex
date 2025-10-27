@@ -4,7 +4,6 @@ defmodule Messaging.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      MessagingWeb.Telemetry,
       {DNSCluster, query: Application.get_env(:messaging, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Messaging.PubSub},
       {Finch, name: Messaging.Finch},
