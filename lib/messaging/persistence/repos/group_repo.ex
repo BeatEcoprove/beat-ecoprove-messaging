@@ -1,6 +1,7 @@
 defmodule Messaging.Persistence.Repos.GroupRepo do
   import Ecto.Query
 
+  alias Messaging.Persistence.Repos.GroupRepo
   alias Messaging.Persistence.Schemas.Member
   alias Messaging.Persistence.Schemas.Group
   alias Messaging.Repo
@@ -46,14 +47,17 @@ defmodule Messaging.Persistence.Repos.GroupRepo do
     |> Repo.all()
   end
 
-  def get_belonging_groups(user_id) do
-    from(g in Group,
-      left_join: m in Member,
-      on: m.group_id == g.id,
-      where: g.creator_id == ^user_id or m.user_id == ^user_id,
-      select: g,
-      distinct: g.id
-    )
-    |> Repo.all()
+  def get_belonging_groups(user_id, opts \\ []) do
+    query =
+      from(g in Group,
+        left_join: m in Member,
+        on: m.group_id == g.id,
+        where: g.creator_id == ^user_id or m.user_id == ^user_id,
+        select: g,
+        distinct: g.id,
+        preload: [members: m]
+      )
+
+    Repo.paginate_cursor(query, opts)
   end
 end

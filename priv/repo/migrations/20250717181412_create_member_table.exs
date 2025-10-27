@@ -3,6 +3,7 @@ use Ecto.Migration
 
   def change do
     create table(:members, primary_key: false) do
+      add :id, :string
       add :user_id, references(:users, type: :string, on_delete: :delete_all), null: false
       add :group_id, references(:groups, type: :string, on_delete: :delete_all), null: false
 

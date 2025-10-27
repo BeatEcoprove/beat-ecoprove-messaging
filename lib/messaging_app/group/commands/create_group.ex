@@ -46,6 +46,7 @@ defmodule MessagingApp.Group.Commands.CreateGroup do
              }),
            {:ok, _} <-
              MemberRepo.create(%{
+               id: creator.public_id,
                user_id: creator.id,
                group_id: group.id
              }) do

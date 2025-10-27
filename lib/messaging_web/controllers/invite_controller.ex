@@ -9,10 +9,12 @@ defmodule MessagingWeb.Controllers.InviteController do
   @doc """
   Send invite to a user
   """
-  def create(conn = %{assigns: %{current_user: current_user}}, %{
-        "id" => group_id,
-        "payload" => payload
-      }) do
+  def create(
+        conn = %{assigns: %{current_user: current_user}},
+        %{
+          "id" => group_id
+        } = payload
+      ) do
     input = %CreateInviteInput{
       group_id: group_id,
       inviter_id: current_user.id,

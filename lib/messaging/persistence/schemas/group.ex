@@ -1,6 +1,8 @@
 defmodule Messaging.Persistence.Schemas.Group do
   use Ecto.Schema
 
+  @avatar_url "https://robohash.org/"
+
   alias Messaging.Persistence.Helpers
   import Ecto.Changeset
 
@@ -17,7 +19,7 @@ defmodule Messaging.Persistence.Schemas.Group do
     field(:sustainability_points, :float, default: 0.0)
     field(:xp, :float, default: 0.0)
     field(:creator_id, :string)
-    field(:avatar_img, :string, default: "not defined yet")
+    field(:avatar_img, :string, default: @avatar_url <> Helpers.generate_ulid())
 
     has_many(:members, Messaging.Persistence.Schemas.Member)
 

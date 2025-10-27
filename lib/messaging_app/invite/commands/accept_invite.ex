@@ -38,6 +38,7 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
            {:ok, user} <- get_invitee(invite.invitee_id),
            {:ok, _} <-
              MemberRepo.create(%{
+               id: user.public_id,
                user_id: user.id,
                group_id: group.id
              }),

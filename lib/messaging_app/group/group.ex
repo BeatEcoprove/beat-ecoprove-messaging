@@ -18,10 +18,11 @@ defmodule MessagingApp.Group do
 
   def update_group(%{id: id, payload: payload}), do: UpdateGroup.call(id, payload)
 
-  def get_all(%{user_id: user_id}), do: GroupRepo.get_belonging_groups(user_id)
+  def get_all(user_id, opts \\ []),
+    do: GroupRepo.get_belonging_groups(user_id, opts)
 
   def get_details(%{group_id: group_id}) do
-    case GroupRepo.get_by_public_id(group_id) do
+    case GroupRepo.get_by_public_id(group_id) |> GroupRepo.preload() do
       nil ->
         {:error, :group_not_found}
 

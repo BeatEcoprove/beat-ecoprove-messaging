@@ -1,6 +1,7 @@
 defmodule MessagingWeb.Controllers.GroupController do
   use MessagingWeb, :controller
 
+  alias MessagingWeb.Controllers.Helpers
   alias MessagingApp.Group.Inputs.UpdateGroupInput
   alias MessagingApp.Group.Inputs.CreateGroupInput
 
@@ -14,12 +15,13 @@ defmodule MessagingWeb.Controllers.GroupController do
   @doc """
   Get user belonging groups
   """
-  def index(conn = %{assigns: %{current_user: current_user}}, _params) do
-    groups = MessagingApp.Group.get_all(%{user_id: current_user.id})
+  def index(conn = %{assigns: %{current_user: current_user}}, params) do
+    opts = Helpers.build_pagination_opts(params)
+    groups = MessagingApp.Group.get_all(current_user.id, opts)
 
     conn
     |> put_status(:ok)
-    |> render("index.json", groups: groups)
+    |> render("index.json", paginate: groups)
   end
 
   @doc """
@@ -40,7 +42,7 @@ defmodule MessagingWeb.Controllers.GroupController do
   @doc """
   Create Group
   """
-  def create(conn = %{assigns: %{current_user: current_user}}, %{"payload" => payload}) do
+  def create(conn = %{assigns: %{current_user: current_user}}, payload) do
     input = %CreateGroupInput{
       name: payload["name"],
       description: payload["description"],
@@ -71,7 +73,7 @@ defmodule MessagingWeb.Controllers.GroupController do
     end
   end
 
-  def update(conn, %{"id" => id, "payload" => payload}) do
+  def update(conn, %{"id" => id} = payload) do
     input = %UpdateGroupInput{
       name: payload["name"],
       description: payload["description"],
