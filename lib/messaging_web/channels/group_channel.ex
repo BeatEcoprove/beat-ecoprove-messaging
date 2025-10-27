@@ -2,8 +2,7 @@ defmodule MessagingWeb.GroupChannel do
   use MessagingWeb, :channel
 
   alias Messaging.Auth.{Group, UserPresence}
-  alias MessagingApp.Messages
-  alias MessagingApp.Messages.Inputs.CreateMessageInput
+  alias Messaging.Broker.EventBus
 
   @impl true
   def join("group:" <> group_id, _payload, socket) do
@@ -54,16 +53,15 @@ defmodule MessagingWeb.GroupChannel do
     group = socket.assigns.group
     user = socket.assigns.user
 
-    input = %CreateMessageInput{
+    event = %Messaging.Broker.Events.Messages.MessageText{
       group_id: group.public_id,
       sender_id: user.id,
       content: payload["content"],
       reply_to: payload["reply_to"],
-      mentions: payload["mentions"],
-      m_type: "text"
+      mentions: payload["mentions"]
     }
 
-    handle(input, socket)
+    handle(event, socket)
   end
 
   @impl true
@@ -71,21 +69,20 @@ defmodule MessagingWeb.GroupChannel do
     group = socket.assigns.group
     user = socket.assigns.user
 
-    input = %CreateMessageInput{
+    event = %Messaging.Broker.Events.Messages.MessageBorrow{
       group_id: group.public_id,
       sender_id: user.id,
       content: payload["content"],
       reply_to: payload["reply_to"],
       mentions: payload["mentions"],
-      garment_id: payload["garment_id"],
-      m_type: "borrow"
+      garment_id: payload["garment_id"]
     }
 
-    handle(input, socket)
+    handle(event, socket)
   end
 
-  defp handle(input, socket) do
-    case Messages.create_message(input) do
+  defp handle(event, socket) do
+    case EventBus.publish(:chat_events, event) do
       :ok ->
         {:reply, {:ok, %{status: "pending"}}, socket}
 

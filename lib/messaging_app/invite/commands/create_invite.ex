@@ -80,7 +80,7 @@ defmodule MessagingApp.Invite.Commands.CreateInvite do
   defp send_create_invite_event(invite = %Messaging.Persistence.Schemas.Invite{}) do
     Messaging.Broker.EventBus.publish(
       :messaging_events,
-      %Messaging.Broker.Events.InviteCreatedEvent{
+      %Messaging.Broker.Events.Invite.CreateEvent{
         id: invite.public_id,
         group_id: invite.group.public_id,
         inviter_id: invite.inviter.public_id,

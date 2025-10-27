@@ -17,6 +17,8 @@ defmodule MessagingWeb.Router do
   scope "/api", MessagingWeb.Controllers do
     pipe_through [:api, :auth_required]
 
+    resources "/notifications", NotificationController, only: [:index, :show]
+
     resources "/groups", GroupController, only: [:index, :show, :create, :delete, :update] do
       delete "/kick", MemberController, :kick
       patch "/role", MemberController, :change_role

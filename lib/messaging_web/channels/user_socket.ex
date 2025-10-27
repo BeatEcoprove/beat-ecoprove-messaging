@@ -4,6 +4,7 @@ defmodule MessagingWeb.UserSocket do
   alias MessagingApp.Schemas.Identity
 
   channel "group:*", MessagingWeb.GroupChannel
+  channel "notification:*", MessagingWeb.NotificationChannel
 
   @impl true
   def connect(%{"token" => token}, socket, _connect_info) do

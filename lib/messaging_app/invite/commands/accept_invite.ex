@@ -101,7 +101,7 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
   defp send_invite_accepted_event(invite = %Messaging.Persistence.Schemas.Invite{}) do
     Messaging.Broker.EventBus.publish(
       :messaging_events,
-      %Messaging.Broker.Events.InviteAcceptedEvent{
+      %Messaging.Broker.Events.Invite.AcceptEvent{
         invite_id: invite.public_id,
         group_id: invite.group.public_id,
         invitee_id: invite.invitee.public_id,

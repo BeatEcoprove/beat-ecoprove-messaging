@@ -7,9 +7,12 @@ defmodule Messaging.Broker.EventBus do
 
   @topics %{
     :auth_events => "auth_events",
+
+    # generic events and especific events
     :messaging_events => "messaging_events",
     :email_events => "messaging_events_email",
-    :chat_events => "messaging_chat_events"
+    :chat_events => "messaging_chat_events",
+    :notifications_events => "messaging_notifications_events"
   }
 
   def child_spec(_arg) do
@@ -98,8 +101,14 @@ defmodule Messaging.Broker.EventBus do
 
   def dispatch_event("auth_events", event), do: Messaging.Broker.Handlers.Auth.handle(event)
 
+  def dispatch_event("messaging_events", event),
+    do: Messaging.Broker.Handlers.Invite.handle(event)
+
   def dispatch_event("messaging_chat_events", event),
     do: Messaging.Broker.Handlers.Chat.handle(event)
+
+  def dispatch_event("messaging_notifications_events", event),
+    do: Messaging.Broker.Handlers.Notification.handle(event)
 
   def dispatch_event(topic, event),
     do: IO.puts("Recived by: #{inspect(topic)} -> #{inspect(event)}")

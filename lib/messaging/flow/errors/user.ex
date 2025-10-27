@@ -8,7 +8,8 @@ defmodule Messaging.Flow.Errors.User do
         Flow.not_found(
           "User not found",
           "The user was not found or doesn't exist."
-        )
+        ),
+      user_not_authorized: Flow.unauthorized()
     }
   end
 end

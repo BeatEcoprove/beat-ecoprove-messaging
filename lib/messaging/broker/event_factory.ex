@@ -3,8 +3,16 @@ defmodule Messaging.Broker.EventFactory do
 
   @events %{
     "user_created" => Events.UserCreatedEvent,
-    "invite_created" => Events.InviteCreatedEvent,
-    "send_message" => Events.Messages.SendMessageEvent
+
+    # invites
+    "invite_created" => Events.Invite.CreateEvent,
+
+    # messagees
+    "text_message" => Events.Messages.MessageText,
+    "borrow_message" => Events.Messages.MessageBorrow,
+
+    # notifications
+    "notify_invite_created" => Events.Notifications.CreateInvite
   }
 
   def build_event(%{"event_type" => event_type, "payload" => payload} = _data) do

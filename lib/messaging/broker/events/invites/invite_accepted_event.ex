@@ -1,4 +1,4 @@
-defmodule Messaging.Broker.Events.InviteAcceptedEvent do
+defmodule Messaging.Broker.Events.Invite.AcceptEvent do
   use Messaging.Broker.Kafka.EventDriver
 
   alias Messaging.Persistence.Helpers
