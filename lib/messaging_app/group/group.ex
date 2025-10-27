@@ -20,8 +20,6 @@ defmodule MessagingApp.Group do
 
   def get_all(%{user_id: user_id}), do: GroupRepo.get_belonging_groups(user_id)
 
-  # TODO Modify auth service to apply section like: group:details
-  # TODO user_id needs to be only at Application level, here only group
   def get_details(%{group_id: group_id}) do
     case GroupRepo.get_by_public_id(group_id) do
       nil ->

@@ -17,8 +17,32 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+
+  mongo:
+    container_name: mongo
+    image: docker.io/mongo:8.0.15
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: messaging
+      MONGO_INITDB_ROOT_PASSWORD: messaging
+      MONGO_INITDB_DATABASE: messaging
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: messaging
+      ME_CONFIG_MONGODB_ADMINPASSWORD: messaging
+      ME_CONFIG_MONGODB_URL: mongodb://messaging:messaging@mongo:27017/messaging?authSource=admin
+      ME_CONFIG_BASICAUTH_USERNAME: messaging
+      ME_CONFIG_BASICAUTH_PASSWORD: messaging
+    depends_on:
+      - mongo
 
   postgres:
     image: docker.io/postgres:18-alpine
