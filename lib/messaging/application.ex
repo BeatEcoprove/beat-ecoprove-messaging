@@ -11,6 +11,7 @@ defmodule Messaging.Application do
       MessagingWeb.Endpoint,
       Messaging.Repo,
       Messaging.Redis.RClient,
+      Messaging.Auth.UserPresence,
       Messaging.Mongo,
       Messaging.Broker.EventBus
     ]

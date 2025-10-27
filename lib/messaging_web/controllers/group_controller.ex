@@ -26,8 +26,6 @@ defmodule MessagingWeb.Controllers.GroupController do
   Get detail from a specific group
   """
   def show(conn = %{assigns: %{current_user: _current_user}}, %{"id" => id}) do
-    IO.puts("#{inspect(id)}")
-
     case MessagingApp.Group.get_details(%{group_id: id}) do
       {:ok, group_detail} ->
         conn
@@ -79,8 +77,6 @@ defmodule MessagingWeb.Controllers.GroupController do
       description: payload["description"],
       is_public: payload["is_public"]
     }
-
-    IO.puts("#{inspect(input)}")
 
     case MessagingApp.Group.update_group(%{id: id, payload: input}) do
       {:ok, group} ->

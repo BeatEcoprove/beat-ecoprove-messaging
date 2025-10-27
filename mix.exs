@@ -26,6 +26,7 @@ defmodule Messaging.MixProject do
   defp deps do
     [
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:phoenix_pubsub_redis, "~> 3.0"},
       {:mongodb_driver, "~> 1.5.0"},
       {:redix, "~> 1.1"},
       {:jose, "~> 1.11"},

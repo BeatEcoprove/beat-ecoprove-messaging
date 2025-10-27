@@ -18,6 +18,11 @@ defmodule Messaging.Flow.Errors.Group do
         Flow.conflict(
           "Json failed",
           "Provide a valid json format for the input"
+        ),
+      group_not_authorized:
+        Flow.conflict(
+          "UnAuthorized!",
+          "You don't have access to the group"
         )
     }
   end

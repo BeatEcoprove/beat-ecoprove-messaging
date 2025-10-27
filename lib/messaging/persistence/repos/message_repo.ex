@@ -12,14 +12,14 @@ defmodule Messaging.Persistence.Repos.MessageRepo do
         {:ok, %{inserted_id: id}} ->
           case get(id) do
             {:error, error} ->
-              error
+              {:error, error}
 
             {:ok, message} ->
-              message
+              {:ok, message}
           end
 
         {:error, reason} ->
-          reason
+          {:error, reason}
       end
     end)
   end
