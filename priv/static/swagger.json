@@ -1,0 +1,1521 @@
+{
+  "info": {
+    "version": "1.0",
+    "description": "This service is responsable for chats and emails",
+    "title": "Messaging Service",
+    "termsOfService": "Open for public",
+    "contact": {
+      "name": "Beat Ecoprove",
+      "email": "beatecoprove@gmail.com"
+    }
+  },
+  "definitions": {
+    "Messages": {
+      "description": "A paginated collection of messages",
+      "properties": {
+        "data": {
+          "description": "List of messages",
+          "items": {
+            "$ref": "#/definitions/Message"
+          },
+          "type": "array"
+        },
+        "has_next": {
+          "description": "Whether there are more messages",
+          "type": "boolean"
+        },
+        "has_prev": {
+          "description": "Whether there are previous messages",
+          "type": "boolean"
+        },
+        "page": {
+          "description": "Current page number",
+          "type": "integer"
+        },
+        "page_size": {
+          "description": "Number of items per page",
+          "type": "integer"
+        },
+        "total": {
+          "description": "Total number of messages",
+          "type": "integer"
+        },
+        "total_pages": {
+          "description": "Total number of pages",
+          "type": "integer"
+        }
+      },
+      "title": "Messages",
+      "type": "object"
+    },
+    "Error": {
+      "description": "Error response",
+      "properties": {
+        "error": {
+          "description": "Error message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "error"
+      ],
+      "title": "Error",
+      "type": "object"
+    },
+    "Notification": {
+      "description": "A user notification",
+      "properties": {
+        "created_at": {
+          "description": "Creation timestamp",
+          "format": "datetime",
+          "type": "string"
+        },
+        "id": {
+          "description": "Notification ID",
+          "type": "string"
+        },
+        "is_read": {
+          "default": false,
+          "description": "Whether the notification has been read",
+          "type": "boolean"
+        },
+        "message": {
+          "description": "Notification message/content",
+          "type": "string"
+        },
+        "metadata": {
+          "description": "Additional notification metadata",
+          "type": "object"
+        },
+        "title": {
+          "description": "Notification title",
+          "type": "string"
+        },
+        "type": {
+          "description": "Notification type",
+          "enum": [
+            "info",
+            "warning",
+            "error",
+            "success",
+            "invite",
+            "message"
+          ],
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Last update timestamp",
+          "format": "datetime",
+          "type": "string"
+        },
+        "user_id": {
+          "description": "User ID who receives the notification",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message",
+        "title",
+        "user_id",
+        "id"
+      ],
+      "title": "Notification",
+      "type": "object"
+    },
+    "Message": {
+      "description": "A message in a group",
+      "properties": {
+        "attachments": {
+          "description": "Message attachments",
+          "items": {
+            "properties": {
+              "filename": {
+                "type": "string"
+              },
+              "mime_type": {
+                "type": "string"
+              },
+              "size": {
+                "type": "integer"
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "content": {
+          "description": "Message content",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Creation timestamp",
+          "format": "datetime",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "id": {
+          "description": "Message ID",
+          "type": "string"
+        },
+        "is_deleted": {
+          "default": false,
+          "description": "Whether the message has been deleted",
+          "type": "boolean"
+        },
+        "is_edited": {
+          "default": false,
+          "description": "Whether the message has been edited",
+          "type": "boolean"
+        },
+        "message_type": {
+          "description": "Type of message",
+          "enum": [
+            "text",
+            "image",
+            "file",
+            "system"
+          ],
+          "type": "string"
+        },
+        "reply_to_id": {
+          "description": "ID of the message being replied to",
+          "type": "string"
+        },
+        "sender_id": {
+          "description": "User ID of the sender",
+          "type": "string"
+        },
+        "sender_username": {
+          "description": "Username of the sender",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Last update timestamp",
+          "format": "datetime",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "sender_id",
+        "group_id",
+        "id"
+      ],
+      "title": "Message",
+      "type": "object"
+    },
+    "Notifications": {
+      "description": "A paginated collection of notifications",
+      "properties": {
+        "data": {
+          "description": "List of notifications",
+          "items": {
+            "$ref": "#/definitions/Notification"
+          },
+          "type": "array"
+        },
+        "page": {
+          "description": "Current page number",
+          "type": "integer"
+        },
+        "page_size": {
+          "description": "Number of items per page",
+          "type": "integer"
+        },
+        "total": {
+          "description": "Total number of notifications",
+          "type": "integer"
+        },
+        "total_pages": {
+          "description": "Total number of pages",
+          "type": "integer"
+        }
+      },
+      "title": "Notifications",
+      "type": "object"
+    },
+    "CreateGroupInput": {
+      "properties": {
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "is_public",
+        "name"
+      ],
+      "title": "Create Group Input",
+      "type": "object"
+    },
+    "GroupCreate": {
+      "description": "Chat Group Detail",
+      "properties": {
+        "avatar_url": {
+          "description": "Group Avatar",
+          "type": "string"
+        },
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insert date",
+          "type": "date"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        },
+        "sustainability_points": {
+          "description": "Sustainability Points",
+          "type": "float"
+        },
+        "xp": {
+          "description": "Sustainability Points",
+          "type": "float"
+        }
+      },
+      "required": [
+        "avatar_url",
+        "xp",
+        "sustainability_points",
+        "inserted_at",
+        "is_public",
+        "name",
+        "id"
+      ],
+      "title": "Group Create Detail",
+      "type": "object"
+    },
+    "Group": {
+      "description": "Chat Group Detail",
+      "properties": {
+        "avatar_url": {
+          "description": "Group Avatar",
+          "type": "string"
+        },
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insert date",
+          "type": "date"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "member_count": {
+          "description": "Members Qty",
+          "type": "int"
+        },
+        "members": {
+          "description": "List of members of the group",
+          "items": "string",
+          "type": "array"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        },
+        "sustainability_points": {
+          "description": "Sustainability Points",
+          "type": "float"
+        },
+        "xp": {
+          "description": "Sustainability Points",
+          "type": "float"
+        }
+      },
+      "required": [
+        "member_count",
+        "avatar_url",
+        "xp",
+        "sustainability_points",
+        "inserted_at",
+        "is_public",
+        "name",
+        "id"
+      ],
+      "title": "Group",
+      "type": "object"
+    },
+    "Groups": {
+      "properties": {
+        "data": {
+          "description": "List of groups",
+          "items": {
+            "$ref": "#/definitions/Group"
+          },
+          "type": "array"
+        },
+        "has_more": {
+          "description": "Checks if there are more groups",
+          "type": "bool"
+        },
+        "next_cursor": {
+          "description": "next element",
+          "type": "string"
+        },
+        "prev_cursor": {
+          "description": "prev element",
+          "type": "string"
+        }
+      },
+      "title": "Groups",
+      "type": "object"
+    },
+    "UpdateGroupInput": {
+      "properties": {
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        }
+      },
+      "title": "Update Group Input",
+      "type": "object"
+    },
+    "ChangeRoleInput": {
+      "description": "Parameters for changing a member's role",
+      "properties": {
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "name": {
+          "description": "New role name",
+          "enum": [
+            "admin",
+            "moderator",
+            "member"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "group_id"
+      ],
+      "title": "Change Role Input",
+      "type": "object"
+    },
+    "ChangeRoleResponse": {
+      "description": "Response when changing a member's role",
+      "properties": {
+        "member": {
+          "$ref": "#/definitions/Member"
+        },
+        "role": {
+          "$ref": "#/definitions/Role"
+        }
+      },
+      "title": "Change Role Response",
+      "type": "object"
+    },
+    "KickMemberInput": {
+      "description": "Parameters for kicking a member from a group",
+      "properties": {
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "member_id": {
+          "description": "Member ID to kick",
+          "type": "string"
+        }
+      },
+      "required": [
+        "member_id",
+        "group_id"
+      ],
+      "title": "Kick Member Input",
+      "type": "object"
+    },
+    "KickMemberResponse": {
+      "description": "Response when kicking a member",
+      "properties": {
+        "member": {
+          "$ref": "#/definitions/Member"
+        },
+        "message": {
+          "description": "Success message",
+          "type": "string"
+        }
+      },
+      "title": "Kick Member Response",
+      "type": "object"
+    },
+    "AcceptInviteInput": {
+      "description": "Parameters for accepting an invitation",
+      "properties": {
+        "token": {
+          "description": "Invitation token",
+          "type": "string"
+        }
+      },
+      "required": [
+        "token"
+      ],
+      "title": "Accept Invite Input",
+      "type": "object"
+    },
+    "Invite": {
+      "description": "A group invitation",
+      "properties": {
+        "created_at": {
+          "description": "Creation timestamp",
+          "format": "datetime",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "id": {
+          "description": "Invite ID",
+          "type": "string"
+        },
+        "invitee_id": {
+          "description": "ID of the user who received the invite",
+          "type": "string"
+        },
+        "inviter_id": {
+          "description": "ID of the user who sent the invite",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role assigned to the invitee",
+          "enum": [
+            "admin",
+            "member",
+            "moderator"
+          ],
+          "type": "string"
+        },
+        "status": {
+          "description": "Invite status",
+          "enum": [
+            "pending",
+            "accepted",
+            "declined"
+          ],
+          "type": "string"
+        },
+        "token": {
+          "description": "Invitation token",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Last update timestamp",
+          "format": "datetime",
+          "type": "string"
+        }
+      },
+      "required": [
+        "token",
+        "role",
+        "invitee_id",
+        "inviter_id",
+        "group_id",
+        "id"
+      ],
+      "title": "Invite",
+      "type": "object"
+    },
+    "CreateInviteInput": {
+      "description": "Parameters for creating a group invitation",
+      "properties": {
+        "invitee_id": {
+          "description": "ID of the user to invite",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role to assign",
+          "enum": [
+            "admin",
+            "member",
+            "moderator"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "invitee_id"
+      ],
+      "title": "Create Invite Input",
+      "type": "object"
+    },
+    "DeclineInviteInput": {
+      "description": "Parameters for declining an invitation",
+      "properties": {
+        "token": {
+          "description": "Invitation token",
+          "type": "string"
+        }
+      },
+      "required": [
+        "token"
+      ],
+      "title": "Decline Invite Input",
+      "type": "object"
+    },
+    "Member": {
+      "description": "A group member",
+      "properties": {
+        "email": {
+          "description": "Email address",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "id": {
+          "description": "Member ID",
+          "type": "string"
+        },
+        "is_active": {
+          "description": "Whether the member is active",
+          "type": "boolean"
+        },
+        "joined_at": {
+          "description": "When the member joined",
+          "format": "datetime",
+          "type": "string"
+        },
+        "user_id": {
+          "description": "User ID",
+          "type": "string"
+        },
+        "username": {
+          "description": "Username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "group_id",
+        "user_id",
+        "id"
+      ],
+      "title": "Member",
+      "type": "object"
+    },
+    "Role": {
+      "description": "A member's role in a group",
+      "properties": {
+        "id": {
+          "description": "Role ID",
+          "type": "string"
+        },
+        "name": {
+          "description": "Role name",
+          "enum": [
+            "admin",
+            "moderator",
+            "member"
+          ],
+          "type": "string"
+        },
+        "permissions": {
+          "description": "List of permissions",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "id"
+      ],
+      "title": "Role",
+      "type": "object"
+    }
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/groups": {
+      "get": {
+        "description": "Get a paginated list of groups the current user belongs to",
+        "operationId": "MessagingWeb.Controllers.GroupController.index",
+        "parameters": [
+          {
+            "description": "Limit Group Number",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer",
+            "x-example": 1
+          },
+          {
+            "description": "Insert At",
+            "in": "query",
+            "name": "before",
+            "required": false,
+            "type": "string",
+            "x-example": "2025-10-27T18:50:32"
+          },
+          {
+            "description": "Insert At",
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "type": "string",
+            "x-example": "2025-10-27T18:50:32"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Groups"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "List groups",
+        "tags": [
+          "Group"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "MessagingWeb.Controllers.GroupController.create",
+        "parameters": [
+          {
+            "description": "Group parameters",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateGroupInput"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Group created successfully",
+            "schema": {
+              "$ref": "#/definitions/GroupCreate"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Create a group",
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/groups/{group_id}/messages": {
+      "get": {
+        "description": "Get a paginated list of messages in a group. Requires group membership.",
+        "operationId": "MessagingWeb.Controllers.MessageController.index",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "group_id",
+            "required": true,
+            "type": "string",
+            "x-example": "group456"
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": "integer",
+            "x-example": 1
+          },
+          {
+            "description": "Number of items per page (default: 20, max: 100)",
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": "integer",
+            "x-example": 20
+          },
+          {
+            "description": "Get messages before this timestamp (ISO 8601)",
+            "in": "query",
+            "name": "before",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Get messages after this timestamp (ISO 8601)",
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Search messages by content",
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Messages"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden - not a member of this group or insufficient permissions",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Group not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "List group messages",
+        "tags": [
+          "Message"
+        ]
+      }
+    },
+    "/groups/{id}": {
+      "delete": {
+        "description": "",
+        "operationId": "MessagingWeb.Controllers.GroupController.delete",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Group deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
+          },
+          "404": {
+            "description": "Group not found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Delete a group",
+        "tags": [
+          "Group"
+        ]
+      },
+      "get": {
+        "description": "",
+        "operationId": "MessagingWeb.Controllers.GroupController.show",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
+          },
+          "404": {
+            "description": "Group not found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Get group details",
+        "tags": [
+          "Group"
+        ]
+      },
+      "put": {
+        "description": "",
+        "operationId": "MessagingWeb.Controllers.GroupController.update",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Updated parameters",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateGroupInput"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Group updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
+          },
+          "404": {
+            "description": "Group not found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Update a group",
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/groups/{id}/invites": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Send an invitation to a user to join a group",
+        "operationId": "MessagingWeb.Controllers.InviteController.create",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "x-example": "group456"
+          },
+          {
+            "description": "Invite parameters",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateInviteInput"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite sent successfully",
+            "schema": {
+              "$ref": "#/definitions/Invite"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Group or user not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Send group invite",
+        "tags": [
+          "Invite"
+        ]
+      }
+    },
+    "/invites/accept": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Accept a group invitation using the invitation token",
+        "operationId": "MessagingWeb.Controllers.InviteController.accept",
+        "parameters": [
+          {
+            "description": "Accept invite parameters",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AcceptInviteInput"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite accepted successfully",
+            "schema": {
+              "$ref": "#/definitions/Invite"
+            }
+          },
+          "400": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Invite not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity - invite already processed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Accept group invite",
+        "tags": [
+          "Invite"
+        ]
+      }
+    },
+    "/invites/decline": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Decline a group invitation using the invitation token",
+        "operationId": "MessagingWeb.Controllers.InviteController.decline",
+        "parameters": [
+          {
+            "description": "Decline invite parameters",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeclineInviteInput"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite declined successfully",
+            "schema": {
+              "$ref": "#/definitions/Invite"
+            }
+          },
+          "400": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Invite not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity - invite already processed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Decline group invite",
+        "tags": [
+          "Invite"
+        ]
+      }
+    },
+    "/members/change-role": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Change a member's role in a group. Requires appropriate permissions.",
+        "operationId": "MessagingWeb.Controllers.MemberController.change_role",
+        "parameters": [
+          {
+            "description": "Role change parameters",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChangeRoleInput"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Role changed successfully",
+            "schema": {
+              "$ref": "#/definitions/ChangeRoleResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden - insufficient permissions",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Group or member not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Change member role",
+        "tags": [
+          "Member"
+        ]
+      }
+    },
+    "/members/kick": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Remove a member from a group. Requires admin or moderator permissions.",
+        "operationId": "MessagingWeb.Controllers.MemberController.kick",
+        "parameters": [
+          {
+            "description": "Kick member parameters",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/KickMemberInput"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Member kicked successfully",
+            "schema": {
+              "$ref": "#/definitions/KickMemberResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden - insufficient permissions to kick this member",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Group or member not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity - cannot kick yourself or group owner",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Kick member from group",
+        "tags": [
+          "Member"
+        ]
+      }
+    },
+    "/messages/{id}": {
+      "get": {
+        "description": "Get detailed information about a specific message. Requires membership in the message's group.",
+        "operationId": "MessagingWeb.Controllers.MessageController.show",
+        "parameters": [
+          {
+            "description": "Message ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "x-example": "msg123"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden - not a member of this group or insufficient permissions",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Message not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Get message details",
+        "tags": [
+          "Message"
+        ]
+      }
+    },
+    "/notifications": {
+      "get": {
+        "description": "Get a paginated list of notifications for the current user",
+        "operationId": "MessagingWeb.Controllers.NotificationController.index",
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": "integer",
+            "x-example": 1
+          },
+          {
+            "description": "Number of items per page",
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": "integer",
+            "x-example": 20
+          },
+          {
+            "description": "Filter by read status (optional)",
+            "in": "query",
+            "name": "is_read",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "description": "Filter by notification type (optional)",
+            "enum": [
+              "group"
+            ],
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Notifications"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden - insufficient permissions",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "List notifications",
+        "tags": [
+          "Notification"
+        ]
+      }
+    },
+    "/notifications/{id}": {
+      "get": {
+        "description": "Get detailed information about a specific notification",
+        "operationId": "MessagingWeb.Controllers.NotificationController.show",
+        "parameters": [
+          {
+            "description": "Notification ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "x-example": "notif123"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Notification"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden - insufficient permissions",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Get notification details",
+        "tags": [
+          "Notification"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0",
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "basePath": "/api",
+  "securityDefinitions": {
+    "Bearer": {
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey",
+      "description": "API Token must be provided via `Authorization: Bearer ` header"
+    }
+  }
+}

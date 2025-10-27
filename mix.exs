@@ -26,6 +26,7 @@ defmodule Messaging.MixProject do
   defp deps do
     [
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:phoenix_swagger, "~> 0.8.5"},
       {:phoenix_pubsub_redis, "~> 3.0"},
       {:mongodb_driver, "~> 1.5.0"},
       {:redix, "~> 1.1"},
@@ -54,6 +55,7 @@ defmodule Messaging.MixProject do
   defp aliases do
     [
       setup: ["deps.get"],
+      generate: ["phx.swagger.generate"],
       serve: ["ecto.migrate", "phx.server"],
       reset: ["ecto.rollback"]
     ]

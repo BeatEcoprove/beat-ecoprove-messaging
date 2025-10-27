@@ -1,6 +1,4 @@
 defmodule MessagingWeb.Controllers.GroupJSON do
-  alias MessagingWeb.Controllers.Helpers
-
   alias Messaging.Persistence.Schemas.Group
 
   def render("group.json", %{group: group = %Group{}}) do

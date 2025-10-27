@@ -14,6 +14,37 @@ defmodule MessagingWeb.Router do
     plug MessagingWeb.Plugs.RequireAuth
   end
 
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :messaging, swagger_file: "swagger.json"
+  end
+
+  def swagger_info do
+    %{
+      schemes: ["http", "https"],
+      basePath: "/api",
+      info: %{
+        version: "1.0",
+        title: "Messaging Service",
+        description: "This service is responsable for chats and emails",
+        termsOfService: "Open for public",
+        contact: %{
+          name: "Beat Ecoprove",
+          email: "beatecoprove@gmail.com"
+        }
+      },
+      securityDefinitions: %{
+        Bearer: %{
+          type: "apiKey",
+          name: "Authorization",
+          description: "API Token must be provided via `Authorization: Bearer ` header",
+          in: "header"
+        }
+      },
+      consumes: ["application/json"],
+      produces: ["application/json"]
+    }
+  end
+
   scope "/api", MessagingWeb.Controllers do
     pipe_through [:api, :auth_required]
 

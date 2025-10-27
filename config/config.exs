@@ -28,7 +28,15 @@ config :brod,
     ]
   ]
 
-# Configures the endpoint
+config :phoenix_swagger, json_library: Jason
+
+config :messaging, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: MessagingWeb.Router
+    ]
+  }
+
 config :messaging, MessagingWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,

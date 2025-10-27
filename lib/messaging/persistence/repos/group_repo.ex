@@ -1,7 +1,6 @@
 defmodule Messaging.Persistence.Repos.GroupRepo do
   import Ecto.Query
 
-  alias Messaging.Persistence.Repos.GroupRepo
   alias Messaging.Persistence.Schemas.Member
   alias Messaging.Persistence.Schemas.Group
   alias Messaging.Repo

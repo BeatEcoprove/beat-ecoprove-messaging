@@ -1,6 +1,8 @@
 defmodule MessagingWeb.Controllers.GroupController do
   use MessagingWeb, :controller
+  use PhoenixSwagger
 
+  alias MessagingWeb.Swagger.GroupSwagger
   alias MessagingWeb.Controllers.Helpers
   alias MessagingApp.Group.Inputs.UpdateGroupInput
   alias MessagingApp.Group.Inputs.CreateGroupInput
@@ -12,6 +14,24 @@ defmodule MessagingWeb.Controllers.GroupController do
       show: :view
     ]
 
+  def swagger_definitions, do: GroupSwagger.swagger_definitions()
+
+  swagger_path :index do
+    get("/groups")
+    summary("List groups")
+    description("Get a paginated list of groups the current user belongs to")
+    produces("application/json")
+
+    parameter(:limit, :query, :integer, "Limit Group Number", example: 1)
+    parameter(:before, :query, :string, "Insert At", example: "2025-10-27T18:50:32")
+    parameter(:after, :query, :string, "Insert At", example: "2025-10-27T18:50:32")
+
+    security([%{Bearer: []}])
+
+    response(200, "Success", Schema.ref(:Groups))
+    response(401, "Unauthorized")
+  end
+
   @doc """
   Get user belonging groups
   """
@@ -22,6 +42,18 @@ defmodule MessagingWeb.Controllers.GroupController do
     conn
     |> put_status(:ok)
     |> render("index.json", paginate: groups)
+  end
+
+  swagger_path :show do
+    get("/groups/{id}")
+    summary("Get group details")
+    produces("application/json")
+
+    parameter(:id, :path, :string, "Group ID", required: true)
+    security([%{Bearer: []}])
+
+    response(200, "Success", Schema.ref(:Group))
+    response(404, "Group not found")
   end
 
   @doc """
@@ -37,6 +69,19 @@ defmodule MessagingWeb.Controllers.GroupController do
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  swagger_path :create do
+    post("/groups")
+    summary("Create a group")
+    produces("application/json")
+    consumes("application/json")
+
+    parameter(:body, :body, Schema.ref(:CreateGroupInput), "Group parameters", required: true)
+    security([%{Bearer: []}])
+
+    response(201, "Group created successfully", Schema.ref(:GroupCreate))
+    response(400, "Invalid input")
   end
 
   @doc """
@@ -61,6 +106,18 @@ defmodule MessagingWeb.Controllers.GroupController do
     end
   end
 
+  swagger_path :delete do
+    PhoenixSwagger.Path.delete("/groups/{id}")
+    summary("Delete a group")
+    produces("application/json")
+
+    parameter(:id, :path, :string, "Group ID", required: true)
+    security([%{Bearer: []}])
+
+    response(200, "Group deleted successfully", Schema.ref(:Group))
+    response(404, "Group not found")
+  end
+
   def delete(conn, %{"id" => id}) do
     case MessagingApp.Group.delete_group(%{group_id: id}) do
       {:ok, group_detail} ->
@@ -71,6 +128,19 @@ defmodule MessagingWeb.Controllers.GroupController do
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  swagger_path :update do
+    put("/groups/{id}")
+    summary("Update a group")
+    produces("application/json")
+
+    parameter(:id, :path, :string, "Group ID", required: true)
+    parameter(:body, :body, Schema.ref(:UpdateGroupInput), "Updated parameters", required: true)
+    security([%{Bearer: []}])
+
+    response(200, "Group updated successfully", Schema.ref(:Group))
+    response(404, "Group not found")
   end
 
   def update(conn, %{"id" => id} = payload) do

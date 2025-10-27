@@ -1,6 +1,6 @@
 defmodule MessagingWeb.Controllers.ErrorController do
   alias Messaging.Flow
-  alias Messaging.Flow.Errors.{Group, Member, Invite, User, Message}
+  alias Messaging.Flow.Errors.{Group, Member, Invite, User, Message, Notification}
 
   use MessagingWeb, :controller
 
@@ -9,7 +9,8 @@ defmodule MessagingWeb.Controllers.ErrorController do
     User.register(),
     Invite.register(),
     Member.register(),
-    Message.register()
+    Message.register(),
+    Notification.register()
   ]
 
   @errors Enum.reduce(@errors_list, %{}, fn map, acc ->
