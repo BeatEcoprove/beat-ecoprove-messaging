@@ -6,23 +6,23 @@ defmodule Messaging.Flow.Errors.Member do
     %{
       member_fail_op:
         Flow.conflict(
-          "Operation failed",
-          "Soemthing went wrong while trying..."
+          "Messaging.Member.FailOp.Title",
+          "Messaging.Member.FailOp.Description"
         ),
       member_low_rate:
         Flow.conflict(
-          "Not enough members",
-          "You are the only one on the group you can't kick yourself!"
+          "Messaging.Member.LowRate.Title",
+          "Messaging.Member.LowRate.Description"
         ),
       member_c_change_self:
         Flow.conflict(
-          "Failed change role",
-          "You can't change role to your self!"
+          "Messaging.Member.ChangeSelfRole.Title",
+          "Messaging.Member.ChangeSelfRole.Description"
         ),
       member_not_found:
         Flow.not_found(
-          "Member not found",
-          "The member was not found or doesn't exist."
+          "Messaging.Member.NotFound.Title",
+          "Messaging.Member.NotFound.Description"
         )
     }
   end

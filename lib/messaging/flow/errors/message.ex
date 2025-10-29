@@ -6,8 +6,8 @@ defmodule Messaging.Flow.Errors.Message do
     %{
       message_not_found:
         Flow.not_found(
-          "Message not found",
-          "The message was not found or doesn't exist."
+          "Messaging.Message.NotFound.Title",
+          "Messaging.Message.NotFound.Description"
         )
     }
   end

@@ -6,23 +6,23 @@ defmodule Messaging.Flow.Errors.Invite do
     %{
       invite_not_found:
         Flow.not_found(
-          "Invite not found",
-          "The invite you are looking for does not exist or may have been expired."
+          "Messaging.Invite.NotFound.Title",
+          "Messaging.Invite.NotFound.Description"
         ),
       invite_self:
         Flow.conflict(
-          "Failed to invite",
-          "You can't invite yourself to the group"
+          "Messaging.Invite.Self.Title",
+          "Messaging.Invite.Self.Description"
         ),
       invite_expired:
         Flow.forbidden(
-          "Invite Expired",
-          "The invite you are looking is expired"
+          "Messaging.Invite.Expired.Title",
+          "Messaging.Invite.Expired.Description"
         ),
       invite_fail_accept:
         Flow.conflict(
-          "Invitation Failed",
-          "Something went wrong, while processing invite request, please try again later"
+          "Messaging.Invite.FailAccept.Title",
+          "Messaging.Invite.FailAccept.Description"
         )
     }
   end
