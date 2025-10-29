@@ -6,8 +6,8 @@ defmodule Messaging.Flow.Errors.Notification do
     %{
       notification_not_found:
         Flow.not_found(
-          "Notification not found",
-          "The notification was not found or doesn't exist."
+          "Messaging.Notification.NotFound.Title",
+          "Messaging.Notification.NotFound.Description"
         )
     }
   end

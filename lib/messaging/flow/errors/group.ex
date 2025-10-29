@@ -6,23 +6,23 @@ defmodule Messaging.Flow.Errors.Group do
     %{
       group_already_exists:
         Flow.conflict(
-          "Failed to create group",
-          "A group with that name already exists."
+          "Messaging.Group.AlreadyExists.Title",
+          "Messaging.Group.AlreadyExists.Description"
         ),
       group_not_found:
         Flow.not_found(
-          "Group not Found",
-          "The group you are looking for does not exist or may have been deleted."
+          "Messaging.Group.NotFound.Title",
+          "Messaging.Group.NotFound.Description"
         ),
       group_wrong_input:
         Flow.conflict(
-          "Json failed",
-          "Provide a valid json format for the input"
+          "Messaging.Group.WrongInput.Title",
+          "Messaging.Group.WrongInput.Description"
         ),
       group_not_authorized:
         Flow.conflict(
-          "UnAuthorized!",
-          "You don't have access to the group"
+          "Messaging.Group.NotAuthorized.Title",
+          "Messaging.Group.NotAuthorized.Description"
         )
     }
   end

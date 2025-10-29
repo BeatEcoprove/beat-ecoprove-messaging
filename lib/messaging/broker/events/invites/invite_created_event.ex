@@ -25,12 +25,12 @@ defmodule Messaging.Broker.Events.Invite.CreateEvent do
     |> validate_number(:status,
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 5,
-      message: "Status must be a integer of the range of [0..5]"
+      message: "Messaging.Validation.InvalidInviteStatus.Description"
     )
     |> validate_number(:role,
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 1,
-      message: "Role must be the range of [0..1], (member/admin)"
+      message: "Messaging.Validation.InvalidRole.Description"
     )
   end
 

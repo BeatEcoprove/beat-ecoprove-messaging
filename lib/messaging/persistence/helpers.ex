@@ -7,10 +7,14 @@ defmodule Messaging.Persistence.Helpers do
   def validate_uuid(cast, attr),
     do:
       cast
-      |> Ecto.Changeset.validate_format(attr, @uuid_regex, message: "must be a valid UUID")
+      |> Ecto.Changeset.validate_format(attr, @uuid_regex,
+        message: "Messaging.Validation.InvalidUUID.Description"
+      )
 
   def validate_email(cast, attr),
     do:
       cast
-      |> Ecto.Changeset.validate_format(attr, @email_regex, message: "must be a valid email")
+      |> Ecto.Changeset.validate_format(attr, @email_regex,
+        message: "Messaging.Validation.InvalidEmail.Description"
+      )
 end

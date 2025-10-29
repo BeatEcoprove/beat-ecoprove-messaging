@@ -69,12 +69,12 @@ defmodule Messaging.Persistence.Schemas.Invite do
     invite
     |> cast(%{"status" => Status.get_status_key(status)}, [:status])
     |> validate_required([:status],
-      message: "please provide the status"
+      message: "Messaging.Validation.InviteStatus.Description"
     )
     |> validate_number(:status,
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 5,
-      message: "Status must be a integer of the range of [0..5]"
+      message: "Messaging.Validation.InvalidInviteStatus.Description"
     )
   end
 
@@ -91,22 +91,22 @@ defmodule Messaging.Persistence.Schemas.Invite do
       :deleted_at
     ])
     |> validate_required([:group_id, :inviter_id, :invitee_id],
-      message: "name, description, and is_public are required fields"
+      message: "Messaging.Validation.RequiredField.Description"
     )
     |> validate_number(:status,
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 5,
-      message: "Status must be a integer of the range of [0..5]"
+      message: "Messaging.Validation.InvalidInviteStatus.Description"
     )
     |> validate_number(:role,
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 1,
-      message: "Role must be the range of [0..1], (member/admin)"
+      message: "Messaging.Validation.InvalidRole.Description"
     )
     |> Helpers.validate_uuid(:public_id)
     |> unique_constraint(:token,
       name: :token_index,
-      message: "Cannot exist two invites with the same token"
+      message: "Messaging.Validation.DuplicateInviteToken.Description"
     )
   end
 end
