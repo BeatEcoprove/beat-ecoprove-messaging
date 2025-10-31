@@ -45,7 +45,7 @@ services:
       - mongo
 
   postgres:
-    image: docker.io/postgres:18-alpine
+    image: docker.io/postgis/postgis:17-3.5-alpine
     container_name: db-container
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
