@@ -45,7 +45,9 @@ services:
       - mongo
 
   postgres:
-    image: docker.io/postgres:18-alpine
+    build:
+      context: .
+      dockerfile: docker/postgres/Dockerfile
     container_name: db-container
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -53,6 +55,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ./docker/postgres/extensions.sql:/docker-entrypoint-initdb.d/init-extensions.sql
 
   redis:
     image: docker.io/redis/redis-stack:latest
