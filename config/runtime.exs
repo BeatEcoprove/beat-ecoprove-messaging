@@ -26,11 +26,7 @@ if config_env() == :prod do
     secret_key_base: secret_key_base
 
   config :messaging, Messaging.Auth.Jwt,
-    identity_service_url:
-      System.get_env("BEAT_IDENTITY_SERVER") ||
-        raise("""
-        environment variable BEAT_IDENTITY_SERVER is missing.
-        """),
+    identity_service_url: System.get_env("BEAT_IDENTITY_SERVER") || "http://localhost:2000",
     issuer: "Beat"
 
   config :messaging, Messaging.Redis.RClient,

@@ -5,7 +5,10 @@ defmodule Messaging.Auth.Jwt do
   alias Joken.Signer
   use Joken.Config
 
-  @jwks_url "#{Application.compile_env(:messaging, Messaging.Auth.Jwt)[:identity_service_url]}/.well-known/jwks.json"
+  defp jwks_url do
+    base_url = Application.get_env(:messaging, Messaging.Auth.Jwt)[:identity_service_url]
+    "#{base_url}/.well-known/jwks.json"
+  end
 
   def token_config() do
     default_claims(skip: [:aud, :iss])
@@ -15,7 +18,7 @@ defmodule Messaging.Auth.Jwt do
   end
 
   defp fetch_jwks do
-    case HTTPoison.get(@jwks_url) do
+    case HTTPoison.get(jwks_url()) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         case Jason.decode(body) do
           {:ok, %{"keys" => keys}} -> {:ok, keys}
@@ -23,7 +26,7 @@ defmodule Messaging.Auth.Jwt do
         end
 
       {:ok, %HTTPoison.Response{status_code: status_code}} ->
-        {:error, "Failed to fetch JWKS from #{@jwks_url} with status code: #{status_code}"}
+        {:error, "Failed to fetch JWKS from #{jwks_url()} with status code: #{status_code}"}
 
       {:error, reason} ->
         {:error, "Failed to fetch JWKS: #{inspect(reason)}"}

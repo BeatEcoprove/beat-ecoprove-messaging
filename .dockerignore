@@ -1,0 +1,79 @@
+# Git
+.git
+.gitignore
+
+# Mix artifacts
+/_build
+/deps
+*.ez
+
+# Generated on crash by the VM
+erl_crash.dump
+
+# Static artifacts
+/priv/static/
+
+# Since we are building assets from web/static,
+# we ignore priv/static. You may want to comment
+# this depending on your deployment strategy.
+/priv/static/cache_manifest.json
+
+# Files matching config/*.secret.exs pattern contain sensitive
+# data and you should not commit them into version control.
+# Alternatively, you may comment the line below and commit the
+# secrets file as long as you replace its contents by environment
+# variables.
+/config/*.secret.exs
+/config/prod.secret.exs
+
+# Temporary files
+.elixir_ls
+.DS_Store
+*.swp
+*.swo
+*~
+
+# IDE
+.idea
+.vscode
+*.iml
+
+# Local environment
+.env
+.env.local
+
+# Documentation
+/doc
+/docs
+
+# Test artifacts
+/cover
+/test
+
+# Development tools
+flake.nix
+flake.lock
+.dir-locals.el
+
+# Docker
+docker-compose.yml
+docker
+Dockerfile*
+.dockerignore
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Database
+*.db
+*.db-*
+
+# Logs
+*.log
+logs/
+
+# README and documentation
+README.md
+CHANGELOG.md
+LICENSE
