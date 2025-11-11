@@ -58,7 +58,7 @@ Then edit `.env` with your configuration. Here's a quick reference:
 ```env
 # Microservice URLs
 BEAT_MESSASSING_SERVER=http://localhost:4000
-BEAT_IDENTITY_SERVER=http://localhost:4001
+JWKS_URL=http://localhost:4001
 SECRET_KEY_BASE=generate-a-secret-key-here
 
 # PostgreSQL (user data, groups, invites)
