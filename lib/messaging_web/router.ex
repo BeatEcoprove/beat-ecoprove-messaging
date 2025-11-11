@@ -14,14 +14,14 @@ defmodule MessagingWeb.Router do
     plug MessagingWeb.Plugs.RequireAuth
   end
 
-  scope "/api/swagger" do
+  scope "/swagger" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :messaging, swagger_file: "swagger.json"
   end
 
   def swagger_info do
     %{
       schemes: ["http", "https"],
-      basePath: "/api",
+      basePath: "/api/v1",
       info: %{
         version: "1.0",
         title: "Messaging Service",

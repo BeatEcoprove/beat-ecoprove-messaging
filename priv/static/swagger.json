@@ -1503,7 +1503,7 @@
     }
   },
   "swagger": "2.0",
-  "basePath": "/api",
+  "basePath": "/api/v1",
   "consumes": [
     "application/json"
   ],

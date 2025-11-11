@@ -5,8 +5,8 @@ config :messaging, Messaging.Auth.Jwt,
   issuer: "Beat"
 
 config :messaging, Messaging.Repo,
-  username: "messaging",
-  password: "messaging",
+  username: "auth",
+  password: "auth",
   hostname: "localhost",
   database: "messaging_db",
   show_sensitive_data_on_connection_error: true,
