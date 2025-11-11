@@ -18,6 +18,8 @@
         src = ./.;
       in
       {
+        inherit version;
+
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             erlang
