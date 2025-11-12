@@ -59,8 +59,8 @@ if config_env() == :prod do
   config :messaging, Messaging.Repo,
     username: System.get_env("POSTGRES_USER") || "messaging",
     password: System.get_env("POSTGRES_PASSWORD") || "messaging",
-    hostname: System.get_env("MONGO_USERNAME") || "localhost",
-    database: System.get_env("POSTGRES_HOST") || "messaging_db",
+    hostname: System.get_env("POSTGRES_HOST") || "localhost",
+    database: System.get_env("POSTGRES_DB") || "messaging_db",
     port: String.to_integer(System.get_env("POSTGRES_PORT") || "5432"),
     show_sensitive_data_on_connection_error: true,
     pool_size: 10
