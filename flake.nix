@@ -7,11 +7,20 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
+    let
+      readVersion = { versionPath, fallback }:
+        if builtins.pathExists versionPath
+        then builtins.replaceStrings ["\n"] [""] (builtins.readFile versionPath)
+        else fallback;
+    in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         pname = "messaging-service";
-        version = "1.0.0";
+        version = readVersion {
+          versionPath = ./VERSION;
+          fallback = "latest";
+        };
 
         erlang = pkgs.erlang_28;
         elixir = pkgs.elixir_1_18.override { inherit erlang; };
