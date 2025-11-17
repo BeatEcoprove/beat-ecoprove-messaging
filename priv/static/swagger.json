@@ -3,13 +3,184 @@
     "version": "1.0",
     "description": "This service is responsable for chats and emails",
     "title": "Messaging Service",
+    "termsOfService": "Open for public",
     "contact": {
       "name": "Beat Ecoprove",
       "email": "beatecoprove@gmail.com"
-    },
-    "termsOfService": "Open for public"
+    }
   },
   "definitions": {
+    "Group": {
+      "description": "Chat Group Detail",
+      "properties": {
+        "avatar_url": {
+          "description": "Group Avatar",
+          "type": "string"
+        },
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insert date",
+          "type": "date"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "member_count": {
+          "description": "Members Qty",
+          "type": "int"
+        },
+        "members": {
+          "description": "List of members of the group",
+          "items": "string",
+          "type": "array"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        },
+        "sustainability_points": {
+          "description": "Sustainability Points",
+          "type": "float"
+        },
+        "xp": {
+          "description": "Sustainability Points",
+          "type": "float"
+        }
+      },
+      "required": [
+        "member_count",
+        "avatar_url",
+        "xp",
+        "sustainability_points",
+        "inserted_at",
+        "is_public",
+        "name",
+        "id"
+      ],
+      "title": "Group",
+      "type": "object"
+    },
+    "UpdateGroupInput": {
+      "properties": {
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        }
+      },
+      "title": "Update Group Input",
+      "type": "object"
+    },
+    "CreateGroupInput": {
+      "properties": {
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "is_public",
+        "name"
+      ],
+      "title": "Create Group Input",
+      "type": "object"
+    },
+    "Groups": {
+      "properties": {
+        "data": {
+          "description": "List of groups",
+          "items": {
+            "$ref": "#/definitions/Group"
+          },
+          "type": "array"
+        },
+        "has_more": {
+          "description": "Checks if there are more groups",
+          "type": "bool"
+        },
+        "next_cursor": {
+          "description": "next element",
+          "type": "string"
+        },
+        "prev_cursor": {
+          "description": "prev element",
+          "type": "string"
+        }
+      },
+      "title": "Groups",
+      "type": "object"
+    },
+    "GroupCreate": {
+      "description": "Chat Group Detail",
+      "properties": {
+        "avatar_url": {
+          "description": "Group Avatar",
+          "type": "string"
+        },
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insert date",
+          "type": "date"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        },
+        "sustainability_points": {
+          "description": "Sustainability Points",
+          "type": "float"
+        },
+        "xp": {
+          "description": "Sustainability Points",
+          "type": "float"
+        }
+      },
+      "required": [
+        "avatar_url",
+        "xp",
+        "sustainability_points",
+        "inserted_at",
+        "is_public",
+        "name",
+        "id"
+      ],
+      "title": "Group Create Detail",
+      "type": "object"
+    },
     "Notifications": {
       "description": "A paginated collection of notifications",
       "properties": {
@@ -112,177 +283,6 @@
         "id"
       ],
       "title": "Notification",
-      "type": "object"
-    },
-    "CreateGroupInput": {
-      "properties": {
-        "description": {
-          "description": "Group description",
-          "type": "string"
-        },
-        "is_public": {
-          "description": "Whether the group is public",
-          "type": "boolean"
-        },
-        "name": {
-          "description": "Group name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "is_public",
-        "name"
-      ],
-      "title": "Create Group Input",
-      "type": "object"
-    },
-    "GroupCreate": {
-      "description": "Chat Group Detail",
-      "properties": {
-        "avatar_url": {
-          "description": "Group Avatar",
-          "type": "string"
-        },
-        "description": {
-          "description": "Group description",
-          "type": "string"
-        },
-        "id": {
-          "description": "Group ID",
-          "type": "string"
-        },
-        "inserted_at": {
-          "description": "Insert date",
-          "type": "date"
-        },
-        "is_public": {
-          "description": "Whether the group is public",
-          "type": "boolean"
-        },
-        "name": {
-          "description": "Group name",
-          "type": "string"
-        },
-        "sustainability_points": {
-          "description": "Sustainability Points",
-          "type": "float"
-        },
-        "xp": {
-          "description": "Sustainability Points",
-          "type": "float"
-        }
-      },
-      "required": [
-        "avatar_url",
-        "xp",
-        "sustainability_points",
-        "inserted_at",
-        "is_public",
-        "name",
-        "id"
-      ],
-      "title": "Group Create Detail",
-      "type": "object"
-    },
-    "Group": {
-      "description": "Chat Group Detail",
-      "properties": {
-        "avatar_url": {
-          "description": "Group Avatar",
-          "type": "string"
-        },
-        "description": {
-          "description": "Group description",
-          "type": "string"
-        },
-        "id": {
-          "description": "Group ID",
-          "type": "string"
-        },
-        "inserted_at": {
-          "description": "Insert date",
-          "type": "date"
-        },
-        "is_public": {
-          "description": "Whether the group is public",
-          "type": "boolean"
-        },
-        "member_count": {
-          "description": "Members Qty",
-          "type": "int"
-        },
-        "members": {
-          "description": "List of members of the group",
-          "items": "string",
-          "type": "array"
-        },
-        "name": {
-          "description": "Group name",
-          "type": "string"
-        },
-        "sustainability_points": {
-          "description": "Sustainability Points",
-          "type": "float"
-        },
-        "xp": {
-          "description": "Sustainability Points",
-          "type": "float"
-        }
-      },
-      "required": [
-        "member_count",
-        "avatar_url",
-        "xp",
-        "sustainability_points",
-        "inserted_at",
-        "is_public",
-        "name",
-        "id"
-      ],
-      "title": "Group",
-      "type": "object"
-    },
-    "Groups": {
-      "properties": {
-        "data": {
-          "description": "List of groups",
-          "items": {
-            "$ref": "#/definitions/Group"
-          },
-          "type": "array"
-        },
-        "has_more": {
-          "description": "Checks if there are more groups",
-          "type": "bool"
-        },
-        "next_cursor": {
-          "description": "next element",
-          "type": "string"
-        },
-        "prev_cursor": {
-          "description": "prev element",
-          "type": "string"
-        }
-      },
-      "title": "Groups",
-      "type": "object"
-    },
-    "UpdateGroupInput": {
-      "properties": {
-        "description": {
-          "description": "Group description",
-          "type": "string"
-        },
-        "is_public": {
-          "description": "Whether the group is public",
-          "type": "boolean"
-        },
-        "name": {
-          "description": "Group name",
-          "type": "string"
-        }
-      },
-      "title": "Update Group Input",
       "type": "object"
     },
     "ChangeRoleInput": {
@@ -765,6 +765,61 @@
           }
         ],
         "summary": "Create a group",
+        "tags": [
+          "Group"
+        ]
+      }
+    },
+    "/groups/public": {
+      "get": {
+        "description": "Get a paginated list of groups the current user doesn't belongs to",
+        "operationId": "MessagingWeb.Controllers.GroupController.fetch_public",
+        "parameters": [
+          {
+            "description": "Limit Group Number",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer",
+            "x-example": 1
+          },
+          {
+            "description": "Insert At",
+            "in": "query",
+            "name": "before",
+            "required": false,
+            "type": "string",
+            "x-example": "2025-10-27T18:50:32"
+          },
+          {
+            "description": "Insert At",
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "type": "string",
+            "x-example": "2025-10-27T18:50:32"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Groups"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "List of Public Groups",
         "tags": [
           "Group"
         ]
@@ -1503,13 +1558,13 @@
     }
   },
   "swagger": "2.0",
-  "basePath": "/api/v1",
-  "consumes": [
-    "application/json"
-  ],
   "produces": [
     "application/json"
   ],
+  "consumes": [
+    "application/json"
+  ],
+  "basePath": "/api/v1",
   "securityDefinitions": {
     "Bearer": {
       "in": "header",

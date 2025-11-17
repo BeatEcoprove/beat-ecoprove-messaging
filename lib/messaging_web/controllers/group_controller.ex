@@ -11,7 +11,8 @@ defmodule MessagingWeb.Controllers.GroupController do
     resource: :group,
     actions: [
       index: :view,
-      show: :view
+      show: :view,
+      fetch_public: :view
     ]
 
   def swagger_definitions, do: GroupSwagger.swagger_definitions()
@@ -36,6 +37,35 @@ defmodule MessagingWeb.Controllers.GroupController do
   Get user belonging groups
   """
   def index(conn = %{assigns: %{current_user: current_user}}, params) do
+    opts = Helpers.build_pagination_opts(params)
+    groups = MessagingApp.Group.get_all(current_user.id, opts)
+
+    conn
+    |> put_status(:ok)
+    |> render("index.json", paginate: groups)
+  end
+
+  swagger_path :fetch_public do
+    get("/groups/public")
+    summary("List of Public Groups")
+    description("Get a paginated list of groups the current user doesn't belongs to")
+    produces("application/json")
+
+    parameter(:limit, :query, :integer, "Limit Group Number", example: 1)
+    parameter(:before, :query, :string, "Insert At", example: "2025-10-27T18:50:32")
+    parameter(:after, :query, :string, "Insert At", example: "2025-10-27T18:50:32")
+
+    security([%{Bearer: []}])
+
+    response(200, "Success", Schema.ref(:Groups))
+    response(401, "Unauthorized")
+  end
+
+  @doc """
+  Get All Public Groups, that the user doesn't belong to
+  """
+  def fetch_public(conn = %{assigns: %{current_user: current_user}}, params) do
+    IO.puts("Hello World!,,,,,,")
     opts = Helpers.build_pagination_opts(params)
     groups = MessagingApp.Group.get_all(current_user.id, opts)
 

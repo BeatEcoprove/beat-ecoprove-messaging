@@ -50,6 +50,8 @@ defmodule MessagingWeb.Router do
 
     resources "/notifications", NotificationController, only: [:index, :show]
 
+    get "/groups/public", GroupController, :fetch_public
+
     resources "/groups", GroupController, only: [:index, :show, :create, :delete, :update] do
       delete "/kick", MemberController, :kick
       patch "/role", MemberController, :change_role
