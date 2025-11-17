@@ -9,7 +9,7 @@ defmodule MessagingApp.Members.Commands.ChangeRole do
   def call(input = %ChangeRoleInput{}) do
     with {:ok, group} <- get_group(input.group_id),
          {:ok, member} <- get_member(input.current_user.id, group.id),
-         {:ok} <- check_change_role(member.user.public_id, input.current_user.id),
+         {:ok} <- check_change_role(member.user.profile_id, input.current_user.id),
          :ok <-
            update_role(group, input.current_user, member, input.role) do
       {:ok, member, input.role}
@@ -33,7 +33,7 @@ defmodule MessagingApp.Members.Commands.ChangeRole do
       %ChangeRoleEvent{
         group_id: group.public_id,
         actor_id: current_user.id,
-        member_id: member.user.public_id,
+        member_id: member.user.profile_id,
         role: role
       }
     )

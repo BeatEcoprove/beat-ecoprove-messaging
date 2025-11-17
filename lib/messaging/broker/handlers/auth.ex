@@ -1,18 +1,21 @@
 defmodule Messaging.Broker.Handlers.Auth do
+  require Logger
+
   alias Messaging.Broker.Events
   alias Messaging.Persistence.Repos.UserRepo
 
-  def handle(%{payload: %Events.UserCreatedEvent{} = event}) do
-    case UserRepo.already_created?(event.public_id) do
+  def handle(%{payload: %Events.ProfileCreatedEvent{} = event}) do
+    case UserRepo.already_created?(event.profile_id) do
       false ->
         UserRepo.create(%{
-          public_id: event.public_id,
-          email: event.email,
+          auth_id: event.auth_id,
+          profile_id: event.profile_id,
+          display_name: event.display_name,
           role: event.role
         })
 
       true ->
-        IO.puts("user already registered")
+        Logger.info("Profile created > #{inspect(event.profile_id)}")
     end
   end
 end

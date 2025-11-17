@@ -10,7 +10,7 @@ defmodule MessagingWeb.Plugs.RequireAuth do
     with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
          {:ok, claims} <- Jwt.verify_token(token, :access) do
       assign(conn, :current_user, %MessagingApp.Schemas.Identity{
-        id: claims["sub"],
+        id: claims["profile_id"],
         email: claims["email"],
         role: claims["role"],
         scope: claims["scope"]

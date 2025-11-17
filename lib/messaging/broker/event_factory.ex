@@ -1,8 +1,10 @@
 defmodule Messaging.Broker.EventFactory do
+  require Logger
+
   alias Messaging.Broker.Events
 
   @events %{
-    "user_created" => Events.UserCreatedEvent,
+    "profile_created" => Events.ProfileCreatedEvent,
 
     # invites
     "invite_created" => Events.Invite.CreateEvent,
@@ -24,10 +26,12 @@ defmodule Messaging.Broker.EventFactory do
         if changeset.valid? do
           {:ok, Ecto.Changeset.apply_changes(changeset)}
         else
+          Logger.info("event not valid, #{inspect(changeset)}")
           {:error, changeset}
         end
 
       :error ->
+        Logger.info("Recive event, but will be ignored, #{inspect(event_type)}")
         {:error, {:unknown_event_type, event_type}}
     end
   end

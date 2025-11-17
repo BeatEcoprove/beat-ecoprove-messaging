@@ -10,6 +10,47 @@
     }
   },
   "definitions": {
+    "Member": {
+      "description": "A group member",
+      "properties": {
+        "email": {
+          "description": "Email address",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "id": {
+          "description": "Member ID",
+          "type": "string"
+        },
+        "is_active": {
+          "description": "Whether the member is active",
+          "type": "boolean"
+        },
+        "joined_at": {
+          "description": "When the member joined",
+          "format": "datetime",
+          "type": "string"
+        },
+        "user_id": {
+          "description": "User ID",
+          "type": "string"
+        },
+        "username": {
+          "description": "Username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "group_id",
+        "user_id",
+        "id"
+      ],
+      "title": "Member",
+      "type": "object"
+    },
     "Group": {
       "description": "Chat Group Detail",
       "properties": {
@@ -68,117 +109,134 @@
       "title": "Group",
       "type": "object"
     },
-    "UpdateGroupInput": {
+    "KickMemberInput": {
+      "description": "Parameters for kicking a member from a group",
       "properties": {
-        "description": {
-          "description": "Group description",
-          "type": "string"
-        },
-        "is_public": {
-          "description": "Whether the group is public",
-          "type": "boolean"
-        },
-        "name": {
-          "description": "Group name",
-          "type": "string"
-        }
-      },
-      "title": "Update Group Input",
-      "type": "object"
-    },
-    "CreateGroupInput": {
-      "properties": {
-        "description": {
-          "description": "Group description",
-          "type": "string"
-        },
-        "is_public": {
-          "description": "Whether the group is public",
-          "type": "boolean"
-        },
-        "name": {
-          "description": "Group name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "is_public",
-        "name"
-      ],
-      "title": "Create Group Input",
-      "type": "object"
-    },
-    "Groups": {
-      "properties": {
-        "data": {
-          "description": "List of groups",
-          "items": {
-            "$ref": "#/definitions/Group"
-          },
-          "type": "array"
-        },
-        "has_more": {
-          "description": "Checks if there are more groups",
-          "type": "bool"
-        },
-        "next_cursor": {
-          "description": "next element",
-          "type": "string"
-        },
-        "prev_cursor": {
-          "description": "prev element",
-          "type": "string"
-        }
-      },
-      "title": "Groups",
-      "type": "object"
-    },
-    "GroupCreate": {
-      "description": "Chat Group Detail",
-      "properties": {
-        "avatar_url": {
-          "description": "Group Avatar",
-          "type": "string"
-        },
-        "description": {
-          "description": "Group description",
-          "type": "string"
-        },
-        "id": {
+        "group_id": {
           "description": "Group ID",
           "type": "string"
         },
-        "inserted_at": {
-          "description": "Insert date",
-          "type": "date"
-        },
-        "is_public": {
-          "description": "Whether the group is public",
-          "type": "boolean"
-        },
-        "name": {
-          "description": "Group name",
+        "member_id": {
+          "description": "Member ID to kick",
           "type": "string"
-        },
-        "sustainability_points": {
-          "description": "Sustainability Points",
-          "type": "float"
-        },
-        "xp": {
-          "description": "Sustainability Points",
-          "type": "float"
         }
       },
       "required": [
-        "avatar_url",
-        "xp",
-        "sustainability_points",
-        "inserted_at",
-        "is_public",
+        "member_id",
+        "group_id"
+      ],
+      "title": "Kick Member Input",
+      "type": "object"
+    },
+    "ChangeRoleInput": {
+      "description": "Parameters for changing a member's role",
+      "properties": {
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "name": {
+          "description": "New role name",
+          "enum": [
+            "admin",
+            "moderator",
+            "member"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
         "name",
+        "group_id"
+      ],
+      "title": "Change Role Input",
+      "type": "object"
+    },
+    "Invite": {
+      "description": "A group invitation",
+      "properties": {
+        "created_at": {
+          "description": "Creation timestamp",
+          "format": "datetime",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "id": {
+          "description": "Invite ID",
+          "type": "string"
+        },
+        "invitee_id": {
+          "description": "ID of the user who received the invite",
+          "type": "string"
+        },
+        "inviter_id": {
+          "description": "ID of the user who sent the invite",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role assigned to the invitee",
+          "enum": [
+            "admin",
+            "member",
+            "moderator"
+          ],
+          "type": "string"
+        },
+        "status": {
+          "description": "Invite status",
+          "enum": [
+            "pending",
+            "accepted",
+            "declined"
+          ],
+          "type": "string"
+        },
+        "token": {
+          "description": "Invitation token",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Last update timestamp",
+          "format": "datetime",
+          "type": "string"
+        }
+      },
+      "required": [
+        "token",
+        "role",
+        "invitee_id",
+        "inviter_id",
+        "group_id",
         "id"
       ],
-      "title": "Group Create Detail",
+      "title": "Invite",
+      "type": "object"
+    },
+    "CreateInviteInput": {
+      "description": "Parameters for creating a group invitation",
+      "properties": {
+        "invitee_id": {
+          "description": "ID of the user to invite",
+          "type": "string"
+        },
+        "role": {
+          "description": "Role to assign",
+          "enum": [
+            "admin",
+            "member",
+            "moderator"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "invitee_id"
+      ],
+      "title": "Create Invite Input",
       "type": "object"
     },
     "Notifications": {
@@ -285,28 +343,117 @@
       "title": "Notification",
       "type": "object"
     },
-    "ChangeRoleInput": {
-      "description": "Parameters for changing a member's role",
+    "CreateGroupInput": {
       "properties": {
-        "group_id": {
-          "description": "Group ID",
+        "description": {
+          "description": "Group description",
           "type": "string"
         },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
         "name": {
-          "description": "New role name",
-          "enum": [
-            "admin",
-            "moderator",
-            "member"
-          ],
+          "description": "Group name",
           "type": "string"
         }
       },
       "required": [
-        "name",
-        "group_id"
+        "is_public",
+        "name"
       ],
-      "title": "Change Role Input",
+      "title": "Create Group Input",
+      "type": "object"
+    },
+    "GroupCreate": {
+      "description": "Chat Group Detail",
+      "properties": {
+        "avatar_url": {
+          "description": "Group Avatar",
+          "type": "string"
+        },
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Group ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insert date",
+          "type": "date"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        },
+        "sustainability_points": {
+          "description": "Sustainability Points",
+          "type": "float"
+        },
+        "xp": {
+          "description": "Sustainability Points",
+          "type": "float"
+        }
+      },
+      "required": [
+        "avatar_url",
+        "xp",
+        "sustainability_points",
+        "inserted_at",
+        "is_public",
+        "name",
+        "id"
+      ],
+      "title": "Group Create Detail",
+      "type": "object"
+    },
+    "Groups": {
+      "properties": {
+        "data": {
+          "description": "List of groups",
+          "items": {
+            "$ref": "#/definitions/Group"
+          },
+          "type": "array"
+        },
+        "has_more": {
+          "description": "Checks if there are more groups",
+          "type": "bool"
+        },
+        "next_cursor": {
+          "description": "next element",
+          "type": "string"
+        },
+        "prev_cursor": {
+          "description": "prev element",
+          "type": "string"
+        }
+      },
+      "title": "Groups",
+      "type": "object"
+    },
+    "UpdateGroupInput": {
+      "properties": {
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "is_public": {
+          "description": "Whether the group is public",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        }
+      },
+      "title": "Update Group Input",
       "type": "object"
     },
     "ChangeRoleResponse": {
@@ -320,25 +467,6 @@
         }
       },
       "title": "Change Role Response",
-      "type": "object"
-    },
-    "KickMemberInput": {
-      "description": "Parameters for kicking a member from a group",
-      "properties": {
-        "group_id": {
-          "description": "Group ID",
-          "type": "string"
-        },
-        "member_id": {
-          "description": "Member ID to kick",
-          "type": "string"
-        }
-      },
-      "required": [
-        "member_id",
-        "group_id"
-      ],
-      "title": "Kick Member Input",
       "type": "object"
     },
     "KickMemberResponse": {
@@ -495,93 +623,6 @@
       "title": "Accept Invite Input",
       "type": "object"
     },
-    "Invite": {
-      "description": "A group invitation",
-      "properties": {
-        "created_at": {
-          "description": "Creation timestamp",
-          "format": "datetime",
-          "type": "string"
-        },
-        "group_id": {
-          "description": "Group ID",
-          "type": "string"
-        },
-        "id": {
-          "description": "Invite ID",
-          "type": "string"
-        },
-        "invitee_id": {
-          "description": "ID of the user who received the invite",
-          "type": "string"
-        },
-        "inviter_id": {
-          "description": "ID of the user who sent the invite",
-          "type": "string"
-        },
-        "role": {
-          "description": "Role assigned to the invitee",
-          "enum": [
-            "admin",
-            "member",
-            "moderator"
-          ],
-          "type": "string"
-        },
-        "status": {
-          "description": "Invite status",
-          "enum": [
-            "pending",
-            "accepted",
-            "declined"
-          ],
-          "type": "string"
-        },
-        "token": {
-          "description": "Invitation token",
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Last update timestamp",
-          "format": "datetime",
-          "type": "string"
-        }
-      },
-      "required": [
-        "token",
-        "role",
-        "invitee_id",
-        "inviter_id",
-        "group_id",
-        "id"
-      ],
-      "title": "Invite",
-      "type": "object"
-    },
-    "CreateInviteInput": {
-      "description": "Parameters for creating a group invitation",
-      "properties": {
-        "invitee_id": {
-          "description": "ID of the user to invite",
-          "type": "string"
-        },
-        "role": {
-          "description": "Role to assign",
-          "enum": [
-            "admin",
-            "member",
-            "moderator"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "role",
-        "invitee_id"
-      ],
-      "title": "Create Invite Input",
-      "type": "object"
-    },
     "DeclineInviteInput": {
       "description": "Parameters for declining an invitation",
       "properties": {
@@ -594,47 +635,6 @@
         "token"
       ],
       "title": "Decline Invite Input",
-      "type": "object"
-    },
-    "Member": {
-      "description": "A group member",
-      "properties": {
-        "email": {
-          "description": "Email address",
-          "type": "string"
-        },
-        "group_id": {
-          "description": "Group ID",
-          "type": "string"
-        },
-        "id": {
-          "description": "Member ID",
-          "type": "string"
-        },
-        "is_active": {
-          "description": "Whether the member is active",
-          "type": "boolean"
-        },
-        "joined_at": {
-          "description": "When the member joined",
-          "format": "datetime",
-          "type": "string"
-        },
-        "user_id": {
-          "description": "User ID",
-          "type": "string"
-        },
-        "username": {
-          "description": "Username",
-          "type": "string"
-        }
-      },
-      "required": [
-        "group_id",
-        "user_id",
-        "id"
-      ],
-      "title": "Member",
       "type": "object"
     },
     "Role": {
@@ -1558,12 +1558,6 @@
     }
   },
   "swagger": "2.0",
-  "produces": [
-    "application/json"
-  ],
-  "consumes": [
-    "application/json"
-  ],
   "basePath": "/api/v1",
   "securityDefinitions": {
     "Bearer": {
@@ -1572,5 +1566,11 @@
       "type": "apiKey",
       "description": "API Token must be provided via `Authorization: Bearer ` header"
     }
-  }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ]
 }

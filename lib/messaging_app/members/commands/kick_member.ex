@@ -70,7 +70,7 @@ defmodule MessagingApp.Members.Commands.KickMember do
       %KickMemberEvent{
         group_id: group.public_id,
         actor_id: actor_id,
-        member_id: member.user.public_id
+        member_id: member.user.profile_id
       }
     )
   end

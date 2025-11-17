@@ -18,7 +18,7 @@ defmodule MessagingApp.Invite.Commands.DeclineInvite do
   end
 
   defp check_validity?(invite, invitee_id) do
-    with true <- invite.invitee.public_id == invitee_id || {:error, :invite_expired},
+    with true <- invite.invitee.profile_id == invitee_id || {:error, :invite_expired},
          true <-
            invite.status == Status.get_status_key(:pending) || {:error, :invite_fail_accept} do
       {:ok, true}

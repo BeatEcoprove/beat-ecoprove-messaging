@@ -65,9 +65,8 @@ defmodule MessagingWeb.Controllers.GroupController do
   Get All Public Groups, that the user doesn't belong to
   """
   def fetch_public(conn = %{assigns: %{current_user: current_user}}, params) do
-    IO.puts("Hello World!,,,,,,")
     opts = Helpers.build_pagination_opts(params)
-    groups = MessagingApp.Group.get_all(current_user.id, opts)
+    groups = MessagingApp.Group.get_all_public(current_user.id, opts)
 
     conn
     |> put_status(:ok)

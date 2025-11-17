@@ -13,7 +13,7 @@ defmodule MessagingWeb.UserSocket do
         socket =
           socket
           |> assign(:user, %Identity{
-            id: claims["sub"],
+            id: claims["profile_id"],
             email: claims["email"],
             role: claims["role"],
             scope: claims["scope"] || []

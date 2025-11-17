@@ -3,14 +3,14 @@ defmodule MessagingWeb.Controllers.MemberJSON do
 
   def render("kick.json", %{member: member = %Member{}}) do
     %{
-      id: member.user.public_id,
+      id: member.user.profile_id,
       status: "kicked"
     }
   end
 
   def render("change_role.json", %{member: member = %Member{}, role: role}) do
     %{
-      id: member.user.public_id,
+      id: member.user.profile_id,
       role: role
     }
   end

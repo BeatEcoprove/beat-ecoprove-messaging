@@ -41,12 +41,12 @@ defmodule MessagingApp.Group.Commands.CreateGroup do
              GroupRepo.create(%{
                name: input.name,
                description: input.description,
-               creator_id: creator.public_id,
+               creator_id: creator.profile_id,
                is_public: input.is_public || false
              }),
            {:ok, _} <-
              MemberRepo.create(%{
-               id: creator.public_id,
+               id: creator.profile_id,
                user_id: creator.id,
                group_id: group.id
              }) do

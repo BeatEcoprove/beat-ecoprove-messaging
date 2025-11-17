@@ -23,7 +23,7 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
   end
 
   defp check_validity?(invite, invitee_id) do
-    with true <- invite.invitee.public_id == invitee_id || {:error, :invite_expired},
+    with true <- invite.invitee.profile_id == invitee_id || {:error, :invite_expired},
          true <-
            invite.status == Status.get_status_key(:pending) || {:error, :invite_fail_accept} do
       {:ok, true}
@@ -38,7 +38,7 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
            {:ok, user} <- get_invitee(invite.invitee_id),
            {:ok, _} <-
              MemberRepo.create(%{
-               id: user.public_id,
+               id: user.profile_id,
                user_id: user.id,
                group_id: group.id
              }),
@@ -105,7 +105,7 @@ defmodule MessagingApp.Invite.Commands.AcceptInvite do
       %Messaging.Broker.Events.Invite.AcceptEvent{
         invite_id: invite.public_id,
         group_id: invite.group.public_id,
-        invitee_id: invite.invitee.public_id,
+        invitee_id: invite.invitee.profile_id,
         role: invite.role
       }
     )

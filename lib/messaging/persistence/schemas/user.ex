@@ -5,15 +5,17 @@ defmodule Messaging.Persistence.Schemas.User do
   alias Messaging.Persistence.Helpers
 
   @type t :: %__MODULE__{
-          public_id: String.t(),
-          email: String.t(),
+          auth_id: String.t(),
+          profile_id: String.t(),
+          display_name: String.t(),
           role: String.t()
         }
 
   @primary_key {:id, :string, autogenerate: {Helpers, :generate_ulid, []}}
   schema "users" do
-    field(:public_id, :string)
-    field(:email, :string)
+    field(:auth_id, :string)
+    field(:profile_id, :string)
+    field(:display_name, :string)
     field(:role, :string, default: "client")
 
     has_many(:members, Messaging.Persistence.Schemas.Member)
@@ -28,10 +30,10 @@ defmodule Messaging.Persistence.Schemas.User do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:public_id, :email, :role])
-    |> validate_required([:public_id, :email])
-    |> Helpers.validate_email(:email)
-    |> Helpers.validate_uuid(:public_id)
-    |> unique_constraint(:email)
+    |> cast(attrs, [:auth_id, :profile_id, :display_name, :role])
+    |> validate_required([:auth_id, :profile_id, :display_name, :role])
+    |> Helpers.validate_uuid(:auth_id)
+    |> Helpers.validate_uuid(:profile_id)
+    |> unique_constraint(:profile_id)
   end
 end

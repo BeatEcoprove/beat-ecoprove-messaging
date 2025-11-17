@@ -83,8 +83,8 @@ defmodule MessagingApp.Invite.Commands.CreateInvite do
       %Messaging.Broker.Events.Invite.CreateEvent{
         id: invite.public_id,
         group_id: invite.group.public_id,
-        inviter_id: invite.inviter.public_id,
-        invitee_id: invite.invitee.public_id,
+        inviter_id: invite.inviter.profile_id,
+        invitee_id: invite.invitee.profile_id,
         token: invite.token,
         role: invite.role,
         status: invite.status
