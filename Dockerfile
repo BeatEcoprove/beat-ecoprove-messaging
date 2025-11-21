@@ -27,6 +27,7 @@ RUN mix phx.swagger.generate
 
 RUN mix phx.digest 2>/dev/null || true
 
+RUN mix generate
 RUN mix compile
 
 RUN mix release

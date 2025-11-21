@@ -53,7 +53,7 @@ defmodule Messaging.MixProject do
   defp aliases do
     [
       setup: ["deps.get"],
-      generate: ["phx.swagger.generate"],
+      generate: ["phx.swagger.generate", "ecto.migrate"],
       serve: ["generate", "ecto.migrate", "phx.server"],
       reset: ["ecto.rollback"]
     ]
