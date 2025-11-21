@@ -7,10 +7,7 @@ end
 if config_env() == :prod do
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||
-      raise """
-      environment variable SECRET_KEY_BASE is missing.
-      You can generate one by calling: mix phx.gen.secret
-      """
+      Base.encode64(:crypto.strong_rand_bytes(48))
 
   host = System.get_env("PHX_HOST") || "localhost"
   port = String.to_integer(System.get_env("BEAT_MESSASSING_SERVER") || "4000")

@@ -1,9 +1,18 @@
-defmodule Messaging do
-  @moduledoc """
-  Messaging keeps the contexts that define your domain
-  and business logic.
+defmodule Messaging.Release do
+  @app :messaging
 
-  Contexts are also responsible for managing your data, regardless
-  if it comes from the database, an external API or others.
-  """
+  defp repos do
+    Application.load(@app)
+    Application.fetch_env!(@app, :ecto_repos)
+  end
+
+  def migrate() do
+    for repo <- repos() do
+      {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
+    end
+  end
+
+  def rollback(repo, version) do
+    {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
+  end
 end
