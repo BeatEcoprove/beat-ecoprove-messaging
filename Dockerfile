@@ -24,12 +24,13 @@ COPY priv priv
 COPY lib lib
 
 RUN mix phx.swagger.generate
+RUN mix ecto.migrate
 RUN mix phx.digest 2>/dev/null || true
 
-RUN SECRET_KEY_BASE=$(mix phx.gen.secret) && \
-    mix ecto.migrate && \
-    mix compile && \
-    mix release
+RUN export SECRET_KEY_BASE=$(elixir -e ':crypto.strong_rand_bytes(48) |> Base.encode64() |> IO.puts') \
+    && echo "SECRET_KEY_BASE generated" \
+    && mix compile \
+    && mix release
 
 FROM elixir:otp-28-alpine
 
