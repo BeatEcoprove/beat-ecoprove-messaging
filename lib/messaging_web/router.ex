@@ -45,7 +45,7 @@ defmodule MessagingWeb.Router do
     }
   end
 
-  scope "/api", MessagingWeb.Controllers do
+  scope "/api/v1", MessagingWeb.Controllers do
     pipe_through [:api, :auth_required]
 
     resources "/notifications", NotificationController, only: [:index, :show]
