@@ -23,7 +23,8 @@ if config_env() == :prod do
     secret_key_base: secret_key_base
 
   config :messaging, Messaging.Auth.Jwt,
-    identity_service_url: System.get_env("JWKS_URL") || "http://localhost:2000",
+    identity_service_url:
+      System.get_env("JWKS_URL") || "http://localhost:2000/.well-known/jwks.json",
     issuer: "Beat"
 
   config :messaging, Messaging.Redis.RClient,

@@ -5,10 +5,7 @@ defmodule Messaging.Auth.Jwt do
   alias Joken.Signer
   use Joken.Config
 
-  defp jwks_url do
-    base_url = Application.get_env(:messaging, Messaging.Auth.Jwt)[:identity_service_url]
-    "#{base_url}/.well-known/jwks.json"
-  end
+  defp jwks_url, do: Application.get_env(:messaging, Messaging.Auth.Jwt)[:identity_service_url]
 
   def token_config() do
     default_claims(skip: [:aud, :iss])
