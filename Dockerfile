@@ -52,9 +52,10 @@ COPY --from=builder --chown=messaging:messaging /app/_build/prod/rel/messaging .
 
 USER messaging
 
+ENV PHX_SERVER=true
 EXPOSE 4000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD ["bin/messaging", "rpc", "1 + 1"]
 
-CMD ["sh", "-c", "bin/messaging eval 'Application.put_env(:messaging, MessagingWeb.Endpoint, server: false); Messaging.Release.migrate()' && exec bin/messaging start"]
+CMD ["sh", "-c", "bin/messaging eval 'Messaging.Release.migrate()' && exec bin/messaging start"]
