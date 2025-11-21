@@ -24,13 +24,14 @@ COPY priv priv
 COPY lib lib
 
 RUN mix phx.swagger.generate
-RUN mix ecto.migrate
 RUN mix phx.digest 2>/dev/null || true
 
 RUN export SECRET_KEY_BASE=$(elixir -e ':crypto.strong_rand_bytes(48) |> Base.encode64() |> IO.puts') \
     && echo "SECRET_KEY_BASE generated" \
     && mix compile \
     && mix release
+
+RUN mix ecto.migrate
 
 FROM elixir:otp-28-alpine
 
@@ -58,4 +59,4 @@ EXPOSE 4000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD ["bin/messaging", "rpc", "1 + 1"]
 
-CMD ["sh", "-c", "bin/messaging eval 'Messaging.Release.migrate()' && bin/messaging start"]
+CMD ["sh", "-c", "bin/messaging start"]
